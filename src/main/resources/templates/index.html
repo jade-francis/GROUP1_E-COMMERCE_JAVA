@@ -1,0 +1,42 @@
+
+  <!DOCTYPE html>
+  <html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <title>Group 1 Store</title>
+
+      <link rel="stylesheet" th:href="@{/css/style.css}">
+  </head>
+  <body>
+
+  <header class="site-header">
+      <a class="brand" th:href="@{/}">
+          Group 1 Store
+      </a>
+
+      <nav>
+          <a th:href="@{/}">Home</a>
+          <a th:href="@{/products}">Products</a>
+          <a th:href="@{/cart}">Cart</a>
+      </nav>
+  </header>
+
+  <main class="hero">
+      <p class="eyebrow">Welcome to our store</p>
+
+      <h1>Shop what you love.</h1>
+
+      <p>
+          Our e-commerce application is being built with
+          Spring Boot, Thymeleaf and PostgreSQL.
+      </p>
+
+      <a class="button" th:href="@{/products}">
+          Browse Products
+      </a>
+  </main>
+
+  </body>
+  </html>
