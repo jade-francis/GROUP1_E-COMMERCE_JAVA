@@ -38,5 +38,9 @@ Thumbs.db
 *.tmp
 *.swp
 
+target/
+*.class
+*.jar
+
 # Optional
 HELP.md
