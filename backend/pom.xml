@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Spring Boot parent gives us dependency versions + the bootRun/repackage plugin -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.5</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.shopease</groupId>
+    <artifactId>shopease-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>shopease-server</name>
+    <description>ShopEase backend — Spring Boot wrapping the tested JDBC DAO layer</description>
+
+    <properties>
+        <!-- Spring Boot 3.3 supports Java 17-21 officially. The build/run machine
+             has JDK 25 installed; if Boot complains about the version, install a
+             JDK 21 (e.g. via SDKMAN) and point JAVA_HOME at it. 17 is the floor. -->
+        <java.version>21</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- Web layer: @RestController, embedded Tomcat, JSON via Jackson -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC driver (replaces the hand-managed postgresql-42.7.3.jar) -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- BCrypt: the DAO layer already depends on jbcrypt for password hashing -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
+        <!-- Testing (optional; kept for when the teammate adds MockMvc tests) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

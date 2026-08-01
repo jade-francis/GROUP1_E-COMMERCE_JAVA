@@ -1,0 +1,7 @@
+# TEMPLATE — safe to commit.
+# Copy this file to db.properties and fill in your real values:
+#     cp db.properties.example db.properties
+# The real db.properties is gitignored so credentials never get committed.
+db.url=jdbc:postgresql://localhost:5432/shopease
+db.user=shopease_admin
+db.password=your_password_here
