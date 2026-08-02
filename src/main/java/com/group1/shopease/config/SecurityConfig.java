@@ -31,6 +31,7 @@
                   .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("SELLER")
                   .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("SELLER")
                   .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("SELLER")
+                  .requestMatchers("/api/orders/seller/**").hasRole("SELLER")
                   .requestMatchers("/api/admin/**").hasRole("ADMIN")
                   .requestMatchers("/admin/**").hasRole("ADMIN")
                   .anyRequest().authenticated()

@@ -1,5 +1,7 @@
  # Group 1 E-Commerce Application
 
+  Backend API details and teammate integration examples are available in [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
+
   An e-commerce website built with Java, Spring Boot, Thymeleaf and PostgreSQL.
 
   ## Technologies

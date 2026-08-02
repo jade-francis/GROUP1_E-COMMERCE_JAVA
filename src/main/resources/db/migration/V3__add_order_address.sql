@@ -1,0 +1,3 @@
+ALTER TABLE orders ADD COLUMN shipping_address VARCHAR(500);
+ALTER TABLE orders ADD COLUMN payment_status VARCHAR(20) NOT NULL DEFAULT 'PENDING'
+    CHECK (payment_status IN ('PENDING', 'PAID', 'FAILED', 'REFUNDED'));

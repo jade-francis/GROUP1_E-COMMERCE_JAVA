@@ -28,6 +28,10 @@ public class ProductService {
     public List<Product> findAll() {
         return productRepository.findAll();
     }
+    public List<Product> search(String query, Long categoryId, int page, int size) {
+        if (page < 0 || size < 1 || size > 100) throw new IllegalArgumentException("Invalid pagination");
+        return productRepository.search(query, categoryId, page, size);
+    }
 
     public Product findById(long id) {
         return productRepository.findById(id)
