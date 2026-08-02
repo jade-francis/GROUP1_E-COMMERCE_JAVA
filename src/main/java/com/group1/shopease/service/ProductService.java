@@ -76,6 +76,10 @@ public class ProductService {
         if (!productRepository.deleteById(id)) throw new ProductNotFoundException(id);
     }
 
+    public List<Product> findBySellerId(long sellerId) {
+        return productRepository.findBySellerId(sellerId);
+    }
+
     private com.group1.shopease.model.User approvedSeller(String email) {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Seller account was not found"));

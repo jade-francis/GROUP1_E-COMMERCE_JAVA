@@ -14,45 +14,105 @@
         <h1>Admin: Manage Sellers</h1>
     </header>
 
+    <div th:if="${success}" class="alert alert-success" th:text="${success}">Success message</div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}">Error message</div>
+
+    <!-- Pending Seller Requests -->
     <div class="profile-card">
         <h3>Pending Seller Requests</h3>
 
-        <div th:if="${sellers.isEmpty()}" class="empty-state">
+        <div th:if="${pendingSellers.isEmpty()}" class="empty-state">
             <p>No pending seller requests.</p>
         </div>
 
-        <div th:unless="${sellers.isEmpty()}">
-            <table class="admin-sellers-table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Requested At</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="seller : ${sellers}">
-                    <td th:text="${seller.id}">1</td>
-                    <td th:text="${seller.name}">Seller Name</td>
-                    <td th:text="${seller.email}">seller@example.com</td>
-                    <td>
-                        <span class="status-badge pending" th:text="${seller.sellerStatus}">PENDING</span>
-                    </td>
-                    <td th:text="${#temporals.format(seller.createdAt, 'MMM dd, yyyy HH:mm')}">Date</td>
-                    <td>
-                        <form th:action="@{/admin/sellers/{id}/approve(id=${seller.id})}" method="post" style="display: inline;">
-                            <button type="submit" class="btn btn-primary btn-sm">Approve</button>
-                        </form>
-                        <form th:action="@{/admin/sellers/{id}/suspend(id=${seller.id})}" method="post" style="display: inline; margin-left: 8px;">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Suspend this seller?')">Suspend</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div th:unless="${pendingSellers.isEmpty()}">
+            <div style="overflow-x: auto;">
+                <table class="admin-sellers-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Requested At</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="seller : ${pendingSellers}">
+                        <td th:text="${seller.id}">1</td>
+                        <td th:text="${seller.name}">Seller Name</td>
+                        <td th:text="${seller.email}">seller@example.com</td>
+                        <td>
+                            <span class="status-badge pending" th:text="${seller.sellerStatus}">PENDING</span>
+                        </td>
+                        <td th:text="${#temporals.format(seller.createdAt, 'MMM dd, yyyy HH:mm')}">Date</td>
+                        <td>
+                            <form th:action="@{/admin/sellers/{id}/approve(id=${seller.id})}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+                            </form>
+                            <form th:action="@{/admin/sellers/{id}/suspend(id=${seller.id})}" method="post" style="display: inline; margin-left: 8px;">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Suspend this seller?')">Suspend</button>
+                            </form>
+                            <form th:action="@{/admin/sellers/{id}/revoke(id=${seller.id})}" method="post" style="display: inline; margin-left: 8px;">
+                                <button type="submit" class="btn btn-secondary btn-sm" onclick="return confirm('Revoke seller request? User will become a regular customer.')">Revoke</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Sellers (Approved, Suspended) -->
+    <div class="profile-card" style="margin-top: 24px;">
+        <h3>All Sellers</h3>
+
+        <div th:if="${allSellers.isEmpty()}" class="empty-state">
+            <p>No sellers registered.</p>
+        </div>
+
+        <div th:unless="${allSellers.isEmpty()}">
+            <div style="overflow-x: auto;">
+                <table class="admin-sellers-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Since</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="seller : ${allSellers}">
+                        <td th:text="${seller.id}">1</td>
+                        <td th:text="${seller.name}">Seller Name</td>
+                        <td th:text="${seller.email}">seller@example.com</td>
+                        <td>
+                            <span class="status-badge" 
+                                  th:class="${seller.sellerStatus == 'APPROVED' ? 'approved' : (seller.sellerStatus == 'SUSPENDED' ? 'suspended' : 'pending')}"
+                                  th:text="${seller.sellerStatus}">APPROVED</span>
+                        </td>
+                        <td th:text="${#temporals.format(seller.createdAt, 'MMM dd, yyyy HH:mm')}">Date</td>
+                        <td>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <form th:if="${seller.sellerStatus == 'APPROVED'}" 
+                                      th:action="@{/admin/sellers/{id}/suspend(id=${seller.id})}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Suspend this seller? They will lose access to seller dashboard.')">Suspend</button>
+                                </form>
+                                <form th:if="${seller.sellerStatus == 'SUSPENDED'}" 
+                                      th:action="@{/admin/sellers/{id}/approve(id=${seller.id})}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary btn-sm">Reactivate</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </main>

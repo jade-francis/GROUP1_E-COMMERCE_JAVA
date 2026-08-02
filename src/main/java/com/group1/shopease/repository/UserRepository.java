@@ -60,6 +60,20 @@ public class UserRepository {
         user.setId(id); return user;
     }
 
+    public List<User> findBySellerRole() {
+        String sql = """
+                SELECT id, name, email, password_hash, role, seller_status, created_at
+                FROM users
+                WHERE role = 'SELLER'
+                ORDER BY id
+                """;
+        return jdbcTemplate.query(sql, (rs, rowNum) -> mapUser(rs));
+    }
+
+    public boolean revokeSellerRequest(long id) {
+        return jdbcTemplate.update("UPDATE users SET role = 'CUSTOMER', seller_status = 'NOT_SELLER' WHERE id = ? AND role = 'SELLER' AND seller_status = 'PENDING'", id) > 0;
+    }
+
     private User mapUser(java.sql.ResultSet rs) throws java.sql.SQLException {
         User user = new User(
                 rs.getLong("id"),
