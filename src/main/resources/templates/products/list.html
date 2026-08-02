@@ -39,11 +39,11 @@
             </div>
             <div th:each="product : ${products}" class="product-card">
                 <div class="product-image">
-                    <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" onerror="this.src='/images/placeholder.jpg'">
+                    <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" onerror="this.onerror=null;this.src='/images/placeholder.svg'">
                 </div>
                 <div class="product-info">
                     <h3 th:text="${product.name}">Product Name</h3>
-                    <p class="product-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2, 'COMMA')}">$0.00</p>
+                    <p class="product-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
                     <p class="product-stock" th:text="${product.stockQuantity} + ' in stock'">In stock</p>
                     <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-primary">View Details</a>
                 </div>

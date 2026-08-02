@@ -11,15 +11,53 @@
 
 <main class="container">
     <section class="hero">
-        <p class="eyebrow">Welcome to our store</p>
-        <h1>Shop what you love.</h1>
-        <p>
-            Our e-commerce application is being built with
-            Spring Boot, Thymeleaf and PostgreSQL.
-        </p>
-        <a class="btn btn-primary btn-lg" th:href="@{/products}">
-            Browse Products
-        </a>
+        <div class="hero-copy">
+            <p class="eyebrow">Welcome to Group 1 Store</p>
+            <h1>Shop what you love, from sellers you trust.</h1>
+            <p class="hero-subtitle">
+                Browse curated electronics, fashion and home essentials —
+                with a straightforward cart, checkout and order tracking
+                built for a smooth shopping experience.
+            </p>
+            <div class="hero-actions">
+                <a class="btn btn-primary btn-lg" th:href="@{/products}">Browse Products</a>
+                <a class="btn btn-secondary btn-lg" th:href="@{/register}">Create an Account</a>
+            </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+            <svg viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="180" cy="160" r="150" fill="var(--color-primary-light)"/>
+                <rect x="70" y="120" width="180" height="140" rx="16" fill="white" stroke="var(--color-border)" stroke-width="2"/>
+                <rect x="70" y="120" width="180" height="40" rx="16" fill="var(--color-primary)"/>
+                <circle cx="96" cy="140" r="6" fill="white" opacity="0.8"/>
+                <circle cx="116" cy="140" r="6" fill="white" opacity="0.5"/>
+                <rect x="94" y="180" width="120" height="10" rx="5" fill="var(--color-border)"/>
+                <rect x="94" y="200" width="80" height="10" rx="5" fill="var(--color-border)"/>
+                <rect x="94" y="228" width="60" height="18" rx="9" fill="var(--color-primary-light)"/>
+                <circle cx="250" cy="90" r="34" fill="white" stroke="var(--color-border)" stroke-width="2"/>
+                <path d="M236 90l10 10 18-20" fill="none" stroke="var(--color-success)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="40" y="215" width="56" height="56" rx="14" fill="white" stroke="var(--color-border)" stroke-width="2"/>
+                <path d="M56 240h24M68 228v24" stroke="var(--color-primary)" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </section>
+
+    <section class="value-props">
+        <div class="value-prop-card">
+            <div class="value-prop-icon">🚚</div>
+            <h3>Fast Fulfillment</h3>
+            <p>Orders are tracked from checkout through delivery, every step of the way.</p>
+        </div>
+        <div class="value-prop-card">
+            <div class="value-prop-icon">🔒</div>
+            <h3>Secure Checkout</h3>
+            <p>Your account and order details are protected with role-based access control.</p>
+        </div>
+        <div class="value-prop-card">
+            <div class="value-prop-icon">🛍️</div>
+            <h3>Trusted Sellers</h3>
+            <p>Every seller is reviewed and approved before their products go live.</p>
+        </div>
     </section>
 </main>
 

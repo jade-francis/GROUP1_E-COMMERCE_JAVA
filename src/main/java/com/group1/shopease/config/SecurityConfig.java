@@ -1,5 +1,6 @@
  package com.group1.shopease.config;
 
+  import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
   import org.springframework.context.annotation.Bean;
   import org.springframework.context.annotation.Configuration;
   import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,11 +22,10 @@
 
           http
               .authorizeHttpRequests(authorize -> authorize
+                  .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                   .requestMatchers(
                       "/",
-                      "/css/**",
-                      "/js/**",
-                      "/images/**",
+                      "/error",
                       "/products",
                       "/products/**",
                       "/cart",

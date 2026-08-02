@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product.id != null ? 'Edit Product' : 'Add Product'} + ' - Group 1 Store'">Product Form - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <header class="page-header">
+        <h1 th:text="${product.id != null ? 'Edit Product' : 'Add New Product'}">Add New Product</h1>
+    </header>
+
+    <div class="profile-card" style="max-width: 600px;">
+        <form th:action="${product.id != null ? '/admin/products/' + product.id : '/admin/products'}" method="post" class="profile-form">
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input type="text" id="name" name="name" th:value="${product.name}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" th:text="${product.description}"
+                          style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; font-family: inherit; resize: vertical;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" th:value="${product.price}" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="stockQuantity">Stock Quantity</label>
+                <input type="number" id="stockQuantity" name="stockQuantity" th:value="${product.stockQuantity}" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="categoryId">Category</label>
+                <select id="categoryId" name="categoryId" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px;">
+                    <option th:each="category : ${categories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}"
+                            th:selected="${product.categoryId != null and product.categoryId == category.id}">
+                        Category
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" id="imageUrl" name="imageUrl" th:value="${product.imageUrl}" placeholder="/images/example.jpg">
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 8px;">
+                <button type="submit" class="btn btn-primary" th:text="${product.id != null ? 'Save Changes' : 'Add Product'}">Add Product</button>
+                <a th:href="@{/admin/products}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

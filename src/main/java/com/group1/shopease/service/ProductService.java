@@ -76,6 +76,15 @@ public class ProductService {
         if (!productRepository.deleteById(id)) throw new ProductNotFoundException(id);
     }
 
+    /** Admin-scoped update: no seller-ownership check. */
+    public Product update(long id, Product product) {
+        product.setId(id);
+        if (!productRepository.updateAny(product)) {
+            throw new ProductNotFoundException(id);
+        }
+        return product;
+    }
+
     private com.group1.shopease.model.User approvedSeller(String email) {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Seller account was not found"));

@@ -39,7 +39,8 @@
                     </div>
                     <div class="navbar-user-dropdown-divider"></div>
                     <a th:href="@{/profile}" class="navbar-user-dropdown-item">Profile</a>
-                    
+                    <a th:href="@{/orders}" class="navbar-user-dropdown-item">Order History</a>
+
                     <!-- Seller-related links based on role/status -->
                     <a sec:authorize="hasRole('SELLER')" 
                        th:href="@{/seller/dashboard}" th:if="${currentUser != null and currentUser.sellerStatus == 'APPROVED'}" class="navbar-user-dropdown-item">
@@ -57,8 +58,8 @@
                     </a>
                     
                     <div class="navbar-user-dropdown-divider"></div>
-                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/sellers}" class="navbar-user-dropdown-item">
-                        Admin: Manage Sellers
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}" class="navbar-user-dropdown-item">
+                        Admin Dashboard
                     </a>
                     
                     <div class="navbar-user-dropdown-divider"></div>

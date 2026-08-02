@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <header class="page-header">
+        <h1>Admin Dashboard</h1>
+        <p class="subtitle">Store-wide overview</p>
+    </header>
+
+    <section class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
+        <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+            <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Total Products</h3>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #6d28d9;" th:text="${totalProducts}">0</p>
+        </div>
+        <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+            <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Total Orders</h3>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #172033;" th:text="${totalOrders}">0</p>
+        </div>
+        <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+            <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Registered Users</h3>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #059669;" th:text="${totalUsers}">0</p>
+        </div>
+        <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+            <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Pending Seller Requests</h3>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #f59e0b;" th:text="${pendingSellers}">0</p>
+        </div>
+    </section>
+
+    <section class="profile-card">
+        <h3>Quick Actions</h3>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
+            <a th:href="@{/admin/products}" class="btn btn-primary">Manage Products</a>
+            <a th:href="@{/admin/sellers}" class="btn btn-secondary">Manage Sellers</a>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

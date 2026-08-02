@@ -25,6 +25,10 @@ public class UserService {
         user.setRole("SELLER"); user.setSellerStatus("PENDING"); return user;
     }
 
+    public long count() {
+        return repository.count();
+    }
+
     public List<User> pendingSellers() {
         return repository.findBySellerStatus("PENDING");
     }

@@ -18,6 +18,11 @@ import java.util.List;
         for(var item:items){if(!orders.reduceStock(item.productId(),item.quantity())) throw new InsufficientStockException(item.productName()); orders.addItem(order.id(),item.productId(),item.quantity(),item.unitPrice());} carts.clear(buyer); return order;
     }
     public List<Order> buyerOrders(String email){return orders.findByBuyer(users.findByEmail(email).orElseThrow(()->new IllegalArgumentException("User not found")).getId());}
+    public Order buyerOrder(String email, long orderId){
+        long buyerId = users.findByEmail(email).orElseThrow(()->new IllegalArgumentException("User not found")).getId();
+        return orders.findByIdForBuyer(orderId, buyerId).orElseThrow(()->new IllegalArgumentException("Order not found"));
+    }
+    public List<com.group1.shopease.model.OrderItem> orderItems(long orderId){return orders.findItems(orderId);}
     public List<Order> sellerOrders(String email){return orders.findBySeller(users.findByEmail(email).orElseThrow(()->new IllegalArgumentException("User not found")).getId());}
     public void updateStatus(String email,long orderId,String status){if(!List.of("SHIPPED","DELIVERED","CANCELLED").contains(status)) throw new IllegalArgumentException("Invalid order status"); if(!orders.updateStatus(orderId,users.findByEmail(email).orElseThrow().getId(),status)) throw new IllegalArgumentException("Order not found or not owned by seller");}
 }

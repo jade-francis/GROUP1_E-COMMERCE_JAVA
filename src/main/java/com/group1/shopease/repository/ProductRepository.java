@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.util.StringUtils;
@@ -81,7 +80,7 @@ public class ProductRepository {
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(
                     sql,
-                    Statement.RETURN_GENERATED_KEYS
+                    new String[] { "id" }
             );
             setProductParameters(statement, product);
             return statement;
@@ -113,6 +112,26 @@ public class ProductRepository {
                 product.getImageUrl(),
                 product.getId(),
                 product.getSellerId()
+        ) > 0;
+    }
+
+    public boolean updateAny(Product product) {
+        String sql = """
+                UPDATE products
+                SET name = ?, description = ?, price = ?, stock_quantity = ?,
+                    category_id = ?, image_url = ?
+                WHERE id = ?
+                """;
+
+        return jdbcTemplate.update(
+                sql,
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                product.getStockQuantity(),
+                product.getCategoryId(),
+                product.getImageUrl(),
+                product.getId()
         ) > 0;
     }
 

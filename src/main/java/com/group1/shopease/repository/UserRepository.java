@@ -55,6 +55,11 @@ public class UserRepository {
         ) > 0;
     }
 
+    public long count() {
+        Long total = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Long.class);
+        return total == null ? 0 : total;
+    }
+
     public User save(User user) {
         Long id = jdbcTemplate.queryForObject("INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?) RETURNING id", Long.class, user.getName(), user.getEmail(), user.getPassword(), user.getRole());
         user.setId(id); return user;

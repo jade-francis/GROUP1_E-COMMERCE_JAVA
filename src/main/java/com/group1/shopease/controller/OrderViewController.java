@@ -30,7 +30,13 @@ public class OrderViewController {
 
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Principal principal, Model model) {
-        // Could add order detail view later
-        return "redirect:/orders";
+        try {
+            Order order = orderService.buyerOrder(principal.getName(), id);
+            model.addAttribute("order", order);
+            model.addAttribute("items", orderService.orderItems(id));
+            return "orders/details";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/orders";
+        }
     }
 }

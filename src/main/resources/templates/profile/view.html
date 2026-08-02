@@ -36,9 +36,6 @@
             </div>
 
             <div class="profile-actions">
-                <div th:if="${user.role == 'CUSTOMER' and user.sellerStatus == 'NOT_SELLER'}">
-                    <a th:href="@{/seller/request}" class="btn btn-primary btn-block">Become a Seller</a>
-                </div>
                 <div th:if="${user.role == 'SELLER' and user.sellerStatus == 'PENDING'}">
                     <span class="btn btn-secondary btn-block disabled">Seller Request: Pending Review</span>
                 </div>
@@ -49,7 +46,7 @@
                     <span class="btn btn-danger btn-block disabled">Seller Account Suspended</span>
                 </div>
                 <div th:if="${user.role == 'ADMIN'}">
-                    <a th:href="@{/admin/sellers}" class="btn btn-primary btn-block">Admin: Manage Sellers</a>
+                    <a th:href="@{/admin}" class="btn btn-primary btn-block">Admin Dashboard</a>
                 </div>
             </div>
         </section>

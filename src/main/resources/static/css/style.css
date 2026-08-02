@@ -1,21 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --color-primary: #6d28d9;
+    --color-primary-hover: #5b21b6;
+    --color-primary-light: #f3f0ff;
+    --color-primary-dark: #4c1d95;
+
+    --color-text: #172033;
+    --color-text-secondary: #6b7280;
+    --color-text-muted: #9ca3af;
+
+    --color-border: #e5e7eb;
+    --color-bg: #f7f8fc;
+    --color-surface: #ffffff;
+
+    --color-success: #059669;
+    --color-success-bg: #ecfdf5;
+    --color-danger: #dc2626;
+    --color-danger-bg: #fef2f2;
+    --color-warning: #f59e0b;
+    --color-warning-bg: #fef3c7;
+
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+
+    --shadow-sm: 0 1px 3px rgba(23, 32, 51, 0.07);
+    --shadow-md: 0 4px 12px rgba(23, 32, 51, 0.08);
+    --shadow-lg: 0 12px 32px rgba(23, 32, 51, 0.14);
+    --shadow-dropdown: 0 10px 40px rgba(23, 32, 51, 0.16);
+
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: #172033;
-    background-color: #f7f8fc;
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background-color: var(--color-bg);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Hero */
+.hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 40px;
+    padding: 56px 48px;
+    margin-bottom: 48px;
+    background: linear-gradient(135deg, #faf9ff 0%, #f3f0ff 100%);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+@media (max-width: 900px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 40px 28px;
+        text-align: center;
+    }
+    .hero-art {
+        max-width: 280px;
+        margin: 0 auto;
+    }
+    .hero-actions {
+        justify-content: center;
+    }
+}
+
+.hero .eyebrow {
+    display: inline-block;
+    margin: 0 0 16px;
+    padding: 6px 14px;
+    background: white;
+    color: var(--color-primary);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero h1 {
+    margin: 0 0 16px;
+    font-size: 44px;
+    line-height: 1.15;
+    font-weight: 800;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    margin: 0 0 32px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    max-width: 480px;
+}
+
+@media (max-width: 900px) {
+    .hero-subtitle {
+        max-width: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.hero-art svg {
+    width: 100%;
+    height: auto;
+}
+
+/* Value Props */
+.value-props {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+@media (max-width: 700px) {
+    .value-props {
+        grid-template-columns: 1fr;
+    }
+}
+
+.value-prop-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+}
+
+.value-prop-icon {
+    font-size: 28px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    background: var(--color-primary-light);
+    border-radius: var(--radius-lg);
+}
+
+.value-prop-card h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.value-prop-card p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 /* Navbar */
 .navbar {
     background-color: white;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 1px 2px rgba(23, 32, 51, 0.04);
     padding: 16px 0;
     position: sticky;
     top: 0;
@@ -359,11 +520,16 @@ body {
     padding: 12px 24px;
     font-size: 15px;
     font-weight: 600;
-    border-radius: 8px;
+    font-family: inherit;
+    border-radius: var(--radius-md);
     border: none;
     cursor: pointer;
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(1px);
 }
 
 .btn:disabled {
@@ -372,12 +538,14 @@ body {
 }
 
 .btn-primary {
-    background-color: #6d28d9;
+    background-color: var(--color-primary);
     color: white;
+    box-shadow: 0 1px 2px rgba(109, 40, 217, 0.15);
 }
 
 .btn-primary:hover:not(:disabled) {
-    background-color: #5b21b6;
+    background-color: var(--color-primary-hover);
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
 }
 
 .btn-lg {
@@ -494,6 +662,78 @@ body {
     display: flex;
     justify-content: flex-end;
     margin-top: 24px;
+}
+
+/* Admin Tables */
+.admin-sellers-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-sellers-table th,
+.admin-sellers-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-sellers-table th {
+    background: #f9fafb;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6b7280;
+}
+
+.admin-sellers-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Checkout Page */
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.checkout-form-section {
+    background: white;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.checkout-form-section h2 {
+    margin: 0 0 24px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.checkout-summary {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 24px;
+}
+
+.checkout-summary h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.checkout-summary-row span:first-child {
+    color: #4b5563;
 }
 
 /* Auth Pages */
@@ -763,6 +1003,19 @@ body {
     margin: 0 0 20px;
     color: #6b7280;
     line-height: 1.6;
+}
+
+.seller-request-section .benefits {
+    text-align: left;
+    max-width: 320px;
+    margin: 0 auto 20px;
+}
+
+.seller-request-section .benefits ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #4b5563;
+    line-height: 1.9;
 }
 
 /* Dropdown for user menu in navbar */

@@ -20,14 +20,14 @@
 
     <article class="product-detail">
         <div class="product-gallery">
-            <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" class="product-main-image" onerror="this.src='/images/placeholder.jpg'">
+            <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" class="product-main-image" onerror="this.onerror=null;this.src='/images/placeholder.svg'">
         </div>
 
         <div class="product-details">
             <h1 th:text="${product.name}">Product Name</h1>
 
             <div class="product-meta">
-                <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2, 'COMMA')}">$0.00</span>
+                <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
                 <span class="product-stock" th:text="${product.stockQuantity} + ' in stock'">In stock</span>
             </div>
 
