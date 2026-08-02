@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Details - Group 1 Store</title>
+    <title>Order Details - Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -53,9 +53,9 @@
                         </div>
                     </div>
                 </td>
-                <td th:text="'$' + ${#numbers.formatDecimal(item.priceAtPurchase, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                <td th:text="'₦' + ${#numbers.formatDecimal(item.priceAtPurchase, 1, 'COMMA', 2, 'POINT')}">₦0.00</td>
                 <td th:text="${item.quantity}">1</td>
-                <td th:text="'$' + ${#numbers.formatDecimal(item.lineTotal, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                <td th:text="'₦' + ${#numbers.formatDecimal(item.lineTotal, 1, 'COMMA', 2, 'POINT')}">₦0.00</td>
             </tr>
             </tbody>
         </table>
@@ -63,7 +63,7 @@
         <div class="cart-summary" style="box-shadow: none; padding: 24px 0 0;">
             <div class="cart-summary-row total">
                 <span>Order Total</span>
-                <span th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                <span th:text="'₦' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">₦0.00</span>
             </div>
         </div>
     </div>
@@ -72,3 +72,5 @@
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>
 </html>
+
+

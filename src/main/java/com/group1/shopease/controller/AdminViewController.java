@@ -129,6 +129,24 @@ public class AdminViewController {
         return "admin/sellers";
     }
 
+    @GetMapping("/users")
+    public String users(Model model) {
+        String guard = requireAdmin();
+        if (guard != null) return guard;
+        model.addAttribute("users", userService.allUsers());
+        return "admin/users";
+    }
+
+    @PostMapping("/users/{id}/delete")
+    public String deleteUser(@PathVariable long id, RedirectAttributes attributes) {
+        String guard = requireAdmin();
+        if (guard != null) return guard;
+        boolean deleted = userService.deleteUser(id);
+        attributes.addFlashAttribute(deleted ? "success" : "error",
+                deleted ? "User removed." : "The user could not be removed.");
+        return "redirect:/admin/users";
+    }
+
     @PostMapping("/sellers/{id}/approve")
     public String approve(@PathVariable long id, RedirectAttributes redirectAttributes) {
         try {

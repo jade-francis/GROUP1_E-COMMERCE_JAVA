@@ -6,6 +6,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -51,6 +57,40 @@ public class UserService {
 
     public boolean revokeSellerRequest(long id) {
         return repository.revokeSellerRequest(id);
+    }
+
+    public List<User> allUsers() { return repository.findAllUsers(); }
+
+    public boolean deleteUser(long id) { return repository.deleteUser(id); }
+
+    public Optional<String> createPasswordResetToken(String email) {
+        return repository.findByEmail(email.trim().toLowerCase()).map(user -> {
+            String token = UUID.randomUUID().toString() + UUID.randomUUID();
+            repository.replacePasswordResetToken(user.getId(), hashToken(token), LocalDateTime.now().plusMinutes(30));
+            return token;
+        });
+    }
+
+    public boolean isPasswordResetTokenValid(String token) {
+        return token != null && repository.findUserIdByValidResetToken(hashToken(token)).isPresent();
+    }
+
+    public void resetPassword(String token, String password) {
+        if (password == null || password.length() < 8 || password.length() > 100) {
+            throw new IllegalArgumentException("Password must be between 8 and 100 characters");
+        }
+        if (token == null || !repository.resetPassword(hashToken(token), passwordEncoder.encode(password))) {
+            throw new IllegalArgumentException("This password reset link is invalid or has expired");
+        }
+    }
+
+    private String hashToken(String token) {
+        try {
+            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                    .digest(token.getBytes(StandardCharsets.UTF_8)));
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException("SHA-256 is unavailable", ex);
+        }
     }
 
     private User changeSellerStatus(long id, String status) {

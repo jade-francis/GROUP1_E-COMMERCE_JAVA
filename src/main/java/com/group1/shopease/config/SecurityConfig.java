@@ -11,7 +11,8 @@
   import org.springframework.http.HttpMethod;
   import org.springframework.security.web.SecurityFilterChain;
   import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-  import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+  import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
   @Configuration
   public class SecurityConfig {
@@ -32,6 +33,8 @@
                       "/cart/**",
                       "/login",
                       "/register",
+                      "/forgot-password",
+                      "/reset-password",
                       "/checkout",
                       "/checkout/**"
                   ).permitAll()
@@ -53,7 +56,10 @@
               .formLogin(form -> form
                   .loginPage("/login")
                   .loginProcessingUrl("/login")
-                  .defaultSuccessUrl("/products", true)
+                  .successHandler((request, response, authentication) -> {
+                      boolean admin = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                      response.sendRedirect(admin ? "/admin" : "/products");
+                  })
                   .failureUrl("/login?error=true")
                   .usernameParameter("email")
                   .permitAll()
