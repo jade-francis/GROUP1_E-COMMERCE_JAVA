@@ -38,6 +38,10 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    public java.util.Optional<Product> findByIdOptional(long id) {
+        return productRepository.findById(id);
+    }
+
     public Product create(Product product, String sellerEmail) {
         var seller = approvedSeller(sellerEmail);
         product.setId(null);

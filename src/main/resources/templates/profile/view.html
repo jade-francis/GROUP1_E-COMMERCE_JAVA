@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <header class="page-header">
+        <h1>My Profile</h1>
+    </header>
+
+    <div class="profile-layout">
+        <!-- Profile Info Card -->
+        <section class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">
+                    <span th:text="${user.name != null ? user.name.substring(0,1).toUpperCase() : 'U'}">U</span>
+                </div>
+                <div class="profile-basic">
+                    <h2 th:text="${user.name}">User Name</h2>
+                    <p class="email" th:text="${user.email}">user@email.com</p>
+                    <div class="role-badges">
+                        <span class="role-badge" 
+                              th:classappend="${user.role == 'CUSTOMER'} ? 'customer' : (${user.role == 'SELLER'} ? 'seller' : (${user.role == 'ADMIN'} ? 'admin' : ''))"
+                              th:text="${user.role}">CUSTOMER</span>
+                        <span th:if="${user.role == 'SELLER'}" class="status-badge" 
+                              th:classappend="${user.sellerStatus == 'PENDING'} ? 'pending' : (${user.sellerStatus == 'APPROVED'} ? 'approved' : (${user.sellerStatus == 'SUSPENDED'} ? 'suspended' : ''))"
+                              th:text="${user.sellerStatus}">PENDING</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <div th:if="${user.role == 'CUSTOMER' and user.sellerStatus == 'NOT_SELLER'}">
+                    <a th:href="@{/seller/request}" class="btn btn-primary btn-block">Become a Seller</a>
+                </div>
+                <div th:if="${user.role == 'SELLER' and user.sellerStatus == 'PENDING'}">
+                    <span class="btn btn-secondary btn-block disabled">Seller Request: Pending Review</span>
+                </div>
+                <div th:if="${user.role == 'SELLER' and user.sellerStatus == 'APPROVED'}">
+                    <a th:href="@{/seller/dashboard}" class="btn btn-primary btn-block">Go to Seller Dashboard</a>
+                </div>
+                <div th:if="${user.role == 'SELLER' and user.sellerStatus == 'SUSPENDED'}">
+                    <span class="btn btn-danger btn-block disabled">Seller Account Suspended</span>
+                </div>
+                <div th:if="${user.role == 'ADMIN'}">
+                    <a th:href="@{/admin/sellers}" class="btn btn-primary btn-block">Admin: Manage Sellers</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Edit Profile Form -->
+        <section class="profile-card">
+            <h3>Edit Profile</h3>
+            <form th:action="@{/profile/edit}" method="post" class="profile-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" th:value="${user.name}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" th:value="${user.email}" required readonly>
+                    <small class="form-hint">Email cannot be changed</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </section>
+
+        <!-- Change Password -->
+        <section class="profile-card">
+            <h3>Change Password</h3>
+            <form th:action="@{/profile/password}" method="post" class="profile-form">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" name="newPassword" required minlength="8">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Password</button>
+            </form>
+        </section>
+
+        <!-- Seller Request Section -->
+        <section th:if="${user.role == 'CUSTOMER' and user.sellerStatus == 'NOT_SELLER'}" class="profile-card seller-request-section">
+            <h3>Become a Seller</h3>
+            <p>Start selling your products on our marketplace. Once approved, you'll get access to the Seller Dashboard to manage products and orders.</p>
+            <a th:href="@{/seller/request}" class="btn btn-primary">Request Seller Access</a>
+        </section>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

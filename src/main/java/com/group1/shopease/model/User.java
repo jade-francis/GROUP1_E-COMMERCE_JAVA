@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
+
 public class User {
     private Long id;
     @NotBlank @Size(max = 100) private String name;
@@ -11,6 +13,7 @@ public class User {
     @NotBlank @Size(min = 8, max = 100) private String password;
     private String role = "CUSTOMER";
     private String sellerStatus = "NOT_SELLER";
+    private LocalDateTime createdAt;
 
     public User() {}
     public User(Long id, String name, String email, String password, String role) {
@@ -28,4 +31,6 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Sellers - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <header class="page-header">
+        <h1>Admin: Manage Sellers</h1>
+    </header>
+
+    <div class="profile-card">
+        <h3>Pending Seller Requests</h3>
+
+        <div th:if="${sellers.isEmpty()}" class="empty-state">
+            <p>No pending seller requests.</p>
+        </div>
+
+        <div th:unless="${sellers.isEmpty()}">
+            <table class="admin-sellers-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Requested At</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="seller : ${sellers}">
+                    <td th:text="${seller.id}">1</td>
+                    <td th:text="${seller.name}">Seller Name</td>
+                    <td th:text="${seller.email}">seller@example.com</td>
+                    <td>
+                        <span class="status-badge pending" th:text="${seller.sellerStatus}">PENDING</span>
+                    </td>
+                    <td th:text="${#temporals.format(seller.createdAt, 'MMM dd, yyyy HH:mm')}">Date</td>
+                    <td>
+                        <form th:action="@{/admin/sellers/{id}/approve(id=${seller.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+                        </form>
+                        <form th:action="@{/admin/sellers/{id}/suspend(id=${seller.id})}" method="post" style="display: inline; margin-left: 8px;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Suspend this seller?')">Suspend</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

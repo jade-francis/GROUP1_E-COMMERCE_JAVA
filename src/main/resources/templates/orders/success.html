@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <div class="auth-page" style="text-align: center;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: #ecfdf5; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        <h1>Order Confirmed!</h1>
+        <p class="subtitle">Thank you for your purchase</p>
+
+        <div style="background: #f9fafb; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: left;">
+            <p style="margin: 0 0 8px;"><strong>Order ID:</strong> <span th:text="${orderId}">#12345</span></p>
+            <p style="margin: 0;"><strong>Status:</strong> <span class="product-stock" style="background: #ecfdf5; color: #059669;">Confirmed</span></p>
+        </div>
+
+        <p style="color: #6b7280; margin-bottom: 24px;">A confirmation email has been sent. You can view your order history anytime.</p>
+
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a th:href="@{/orders}" class="btn btn-primary">View Order History</a>
+            <a th:href="@{/products}" class="btn btn-secondary">Continue Shopping</a>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

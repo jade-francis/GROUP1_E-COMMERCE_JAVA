@@ -50,14 +50,24 @@ public class ProductRepository {
     public List<Product> search(String query, Long categoryId, int page, int size) {
         int offset = page * size;
         String text = StringUtils.hasText(query) ? "%" + query.trim().toLowerCase() + "%" : "%";
-        String sql = """
-                SELECT id, name, description, price, stock_quantity, category_id, image_url, seller_id
-                FROM products
-                WHERE (lower(name) LIKE ? OR lower(coalesce(description, '')) LIKE ?)
-                  AND (? IS NULL OR category_id = ?)
-                ORDER BY id DESC LIMIT ? OFFSET ?
-                """;
-        return jdbcTemplate.query(sql, this::mapRow, text, text, categoryId, categoryId, size, offset);
+        if (categoryId == null) {
+            String sql = """
+                    SELECT id, name, description, price, stock_quantity, category_id, image_url, seller_id
+                    FROM products
+                    WHERE (lower(name) LIKE ? OR lower(coalesce(description, '')) LIKE ?)
+                    ORDER BY id DESC LIMIT ? OFFSET ?
+                    """;
+            return jdbcTemplate.query(sql, this::mapRow, text, text, size, offset);
+        } else {
+            String sql = """
+                    SELECT id, name, description, price, stock_quantity, category_id, image_url, seller_id
+                    FROM products
+                    WHERE (lower(name) LIKE ? OR lower(coalesce(description, '')) LIKE ?)
+                      AND category_id = ?
+                    ORDER BY id DESC LIMIT ? OFFSET ?
+                    """;
+            return jdbcTemplate.query(sql, this::mapRow, text, text, categoryId, size, offset);
+        }
     }
 
     public Product save(Product product) {
