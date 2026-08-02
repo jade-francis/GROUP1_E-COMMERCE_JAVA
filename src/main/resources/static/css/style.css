@@ -664,6 +664,27 @@ body {
     margin-top: 24px;
 }
 
+/* Alerts */
+.alert {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+}
+
+.alert-success {
+    background: var(--color-success-bg);
+    border-color: #a7f3d0;
+    color: var(--color-success);
+}
+
+.alert-error {
+    background: var(--color-danger-bg);
+    border-color: #fecaca;
+    color: var(--color-danger);
+}
+
 /* Admin Tables */
 .admin-sellers-table {
     width: 100%;
@@ -753,10 +774,20 @@ body {
     text-align: center;
 }
 
+.subtitle {
+    color: var(--color-text-secondary);
+    margin: 4px 0 0;
+}
+
 .auth-page .subtitle {
     text-align: center;
-    color: #6b7280;
     margin-bottom: 32px;
+}
+
+.field-error {
+    color: var(--color-danger);
+    font-size: 13px;
+    margin-top: 4px;
 }
 
 .form-group {

@@ -19,19 +19,19 @@
     <section class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
         <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
             <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">My Products</h3>
-            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #6d28d9;">0</p>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #6d28d9;" th:text="${productCount}">0</p>
         </div>
         <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
             <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Pending Orders</h3>
-            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #f59e0b;">0</p>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #f59e0b;" th:text="${pendingOrders}">0</p>
         </div>
         <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
             <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Total Sales</h3>
-            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #059669;">$0.00</p>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #059669;" th:text="'$' + ${#numbers.formatDecimal(totalSales, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
         </div>
         <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
             <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Revenue (30 days)</h3>
-            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #172033;">$0.00</p>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #172033;" th:text="'$' + ${#numbers.formatDecimal(revenue30Days, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
         </div>
     </section>
 
@@ -51,8 +51,23 @@
             <h3>Recent Orders</h3>
             <a th:href="@{/seller/orders}" class="btn btn-secondary btn-sm">View All</a>
         </div>
-        <div class="empty-state">
+        <div th:if="${recentOrders.isEmpty()}" class="empty-state">
             <p>No orders yet. Start by adding products to your store.</p>
+        </div>
+        <div th:unless="${recentOrders.isEmpty()}" style="overflow-x: auto;">
+            <table class="admin-sellers-table">
+                <thead>
+                <tr><th>Order</th><th>Date</th><th>Status</th><th>Total</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${recentOrders}">
+                    <td th:text="'#' + ${order.id}">#1</td>
+                    <td th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy')}">Date</td>
+                    <td><span class="status-badge" th:text="${order.status}">PENDING</span></td>
+                    <td th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </section>
 
@@ -62,9 +77,23 @@
             <h3>Your Products</h3>
             <a th:href="@{/seller/products}" class="btn btn-secondary btn-sm">View All</a>
         </div>
-        <div class="empty-state">
+        <div th:if="${recentProducts.isEmpty()}" class="empty-state">
             <p>No products yet. Add your first product to start selling.</p>
             <a th:href="@{/seller/products/new}" class="btn btn-primary" style="margin-top: 16px;">Add First Product</a>
+        </div>
+        <div th:unless="${recentProducts.isEmpty()}" style="overflow-x: auto;">
+            <table class="admin-sellers-table">
+                <thead>
+                <tr><th>Name</th><th>Price</th><th>Stock</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${recentProducts}">
+                    <td th:text="${product.name}">Product</td>
+                    <td th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                    <td th:text="${product.stockQuantity}">0</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </section>
 </main>

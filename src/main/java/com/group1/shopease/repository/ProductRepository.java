@@ -74,6 +74,7 @@ public class ProductRepository {
                 INSERT INTO products
                     (name, description, price, stock_quantity, category_id, image_url, seller_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -141,6 +142,17 @@ public class ProductRepository {
 
     public boolean deleteByIdAndSellerId(long id, long sellerId) {
         return jdbcTemplate.update("DELETE FROM products WHERE id = ? AND seller_id = ?", id, sellerId) > 0;
+    }
+
+    public List<Product> findBySellerId(long sellerId) {
+        String sql = """
+                SELECT id, name, description, price,
+                         stock_quantity, category_id, image_url, seller_id
+                FROM products
+                WHERE seller_id = ?
+                ORDER BY id DESC
+                """;
+        return jdbcTemplate.query(sql, this::mapRow, sellerId);
     }
 
     private void setProductParameters(PreparedStatement statement, Product product)

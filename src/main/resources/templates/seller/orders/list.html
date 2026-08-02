@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Orders - Manage Orders</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <header class="page-header">
+        <h1>Order Management</h1>
+        <p class="subtitle">View and update order statuses</p>
+    </header>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}">Success message</div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}">Error message</div>
+
+    <div class="profile-card">
+        <div th:if="${orders.isEmpty()}" class="empty-state" style="text-align: center; padding: 48px 24px;">
+            <h3>No orders yet</h3>
+            <p style="color: #6b7280;">Orders will appear here when customers purchase your products.</p>
+        </div>
+
+        <div th:unless="${orders.isEmpty()}">
+            <div style="overflow-x: auto;">
+                <table class="admin-sellers-table">
+                    <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Items</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td>
+                            <strong>#<span th:text="${order.id}">000</span></strong>
+                        </td>
+                        <td>
+                            <span th:text="${order.buyerEmail}">customer@email.com</span>
+                        </td>
+                        <td>
+                            <span th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy HH:mm')}">Date</span>
+                        </td>
+                        <td>
+                            <span class="status-badge" 
+                                  th:class="${order.status == 'PENDING' ? 'pending' : (order.status == 'SHIPPED' ? 'approved' : (order.status == 'DELIVERED' ? 'approved' : 'suspended'))}"
+                                  th:text="${order.status}">PENDING</span>
+                        </td>
+                        <td>
+                            <strong th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">$0.00</strong>
+                        </td>
+                        <td>
+                            <span th:text="${order.itemCount + ' item(s)'}">0 items</span>
+                        </td>
+                        <td>
+                            <form th:action="@{/seller/orders/{id}/status(id=${order.id})}" method="post" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <select name="status" required>
+                                    <option value="PENDING" th:selected="${order.status == 'PENDING'}">Pending</option>
+                                    <option value="SHIPPED" th:selected="${order.status == 'SHIPPED'}">Shipped</option>
+                                    <option value="DELIVERED" th:selected="${order.status == 'DELIVERED'}">Delivered</option>
+                                    <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">Cancelled</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

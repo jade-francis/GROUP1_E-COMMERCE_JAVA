@@ -85,6 +85,10 @@ public class ProductService {
         return product;
     }
 
+    public List<Product> findBySellerId(long sellerId) {
+        return productRepository.findBySellerId(sellerId);
+    }
+
     private com.group1.shopease.model.User approvedSeller(String email) {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Seller account was not found"));

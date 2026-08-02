@@ -45,6 +45,14 @@ public class UserService {
         return repository.findByEmail(email);
     }
 
+    public List<User> allSellers() {
+        return repository.findBySellerRole();
+    }
+
+    public boolean revokeSellerRequest(long id) {
+        return repository.revokeSellerRequest(id);
+    }
+
     private User changeSellerStatus(long id, String status) {
         if (!repository.updateSellerStatus(id, status)) {
             throw new IllegalArgumentException("Seller account was not found");

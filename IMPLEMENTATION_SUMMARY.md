@@ -3,15 +3,15 @@
 **Project:** GROUP1_E-COMMERCE_JAVA (ShopEase)
 **Push by:** jimjim
 **Date:** 2026-08-02
-**Time:** 11:55 BST
+**Time:** 13:15 BST
 **Branch:** main
-**Commit:** Final demo-ready implementation
+**Commit:** Complete seller/admin UI + product/order management
 
 ---
 
 ## 📋 Overview
 
-Complete implementation of 6 MVP features + Seller/Admin flow for school group project (Wednesday deadline). All features end-to-end verified.
+Complete implementation of 6 MVP features + Full Seller/Admin flow for school group project (Wednesday deadline). All features end-to-end verified.
 
 ---
 
@@ -49,7 +49,7 @@ Complete implementation of 6 MVP features + Seller/Admin flow for school group p
 
 ---
 
-## 🔄 Seller Flow (Bonus - Fully Implemented)
+## 🔄 Seller Flow (Fully Implemented)
 
 ### Buyer → Seller Request
 - **Web:** Profile page (`/profile`) → "Become a Seller" button (CUSTOMER + NOT_SELLER)
@@ -57,14 +57,26 @@ Complete implementation of 6 MVP features + Seller/Admin flow for school group p
 - **Status:** PENDING badge on profile, redirect to profile with `?status=pending`
 
 ### Admin Approval
-- **Web:** `/admin/sellers` (table: ID, Name, Email, Status, Requested At, Approve/Suspend)
-- **API:** `GET /api/admin/sellers/pending`, `POST /api/admin/sellers/{id}/approve|suspend`
-- **Actions:** Approve → sellerStatus=APPROVED, Suspend → SUSPENDED
+- **Web:** `/admin/sellers` (Pending + All Sellers tabs)
+- **Actions:** Approve, Suspend, **Revoke (pending only)**, Reactivate
+- **All Sellers table:** Shows APPROVED/SUSPENDED sellers with status actions
 
 ### Seller Dashboard
-- **Web:** `/seller/dashboard` (stats cards, quick actions, recent orders, products)
+- **Web:** `/seller/dashboard` (stats cards, quick actions, recent orders/products)
 - **Navbar:** "Seller Dashboard" link appears when APPROVED
-- **API:** Seller can CRUD products (`POST/PUT/DELETE /api/products`)
+- **Quick Action Links:** Manage Products, Manage Orders, Add Product
+
+### Seller Product Management (NEW)
+- **List:** `/seller/products` (table: image, name, category, price, stock, edit/delete)
+- **Create:** `/seller/products/new` (form with category dropdown, validation)
+- **Edit:** `/seller/products/{id}/edit` (pre-filled form)
+- **Delete:** POST `/seller/products/{id}/delete` (confirmation)
+- **Category dropdown** populated from DB
+
+### Seller Order Management (NEW)
+- **List:** `/seller/orders` (table: order#, customer, date, status dropdown, total, items)
+- **Status Updates:** Dropdown per order (PENDING/SHIPPED/DELIVERED/CANCELLED)
+- **API:** `GET /api/orders/seller`, `PUT /api/orders/{id}/status`
 
 ---
 
@@ -76,7 +88,7 @@ Complete implementation of 6 MVP features + Seller/Admin flow for school group p
 | V1__create_schema.sql | Core tables: users, categories, products, cart_items, orders, order_items |
 | V2__add_seller_support.sql | `users.seller_status`, `products.seller_id` FK |
 | V3__add_order_address.sql | `orders.shipping_address` |
-| V4__add_seller_role.sql | **NEW:** Added 'SELLER' to `users_role_check` constraint |
+| V4__add_seller_role.sql | Added 'SELLER' to `users_role_check` constraint |
 
 ### Key Schema
 ```sql
@@ -105,7 +117,9 @@ orders: id, user_id, total_amount, status, shipping_address, created_at
 | `OrderViewController` | GET `/orders` |
 | `ProfileController` | GET `/profile`, POST `/profile/edit|password` |
 | `SellerController` | GET `/seller/request`, POST `/seller/request`, GET `/seller/dashboard` |
-| `AdminViewController` | GET `/admin/sellers`, POST `/admin/sellers/{id}/approve|suspend` |
+| `SellerProductController` | GET/POST `/seller/products`, `/new`, `/{id}/edit`, `/{id}`, `/{id}/delete` |
+| `SellerOrderController` | GET `/seller/orders`, POST `/{id}/status` |
+| `AdminViewController` | GET `/admin/sellers`, POST `/{id}/approve|suspend|revoke` |
 
 ### REST Controllers (API)
 | Controller | Base Path | Endpoints |
@@ -114,33 +128,33 @@ orders: id, user_id, total_amount, status, shipping_address, created_at
 | `CategoryController` | `/api/categories` | List |
 | `AuthController` | `/api/auth` | register, me, seller-request |
 | `CartController` | `/api/cart` | GET, POST, PUT, DELETE |
-| `OrderController` | `/api/orders` | List, checkout, seller orders |
+| `OrderController` | `/api/orders` | List, checkout, seller orders, status |
 | `AdminController` | `/api/admin/sellers` | pending, approve, suspend |
 
 ### Security Config
-- **PermitAll:** `/`, `/css/**`, `/js/**`, `/images/**`, `/products/**`, `/cart/**`, `/checkout/**`, `/orders/**`, `/login`, `/register`, `/api/auth/register`, `/seller/request`, `/profile/**`
+- **PermitAll:** `/`, `/css/**`, `/js/**`, `/images/**`, `/products/**`, `/cart/**`, `/checkout/**`, `/orders/**`, `/login`, `/register`, `/api/auth/register`, `/seller/request`, `/profile/**`, `/seller/**`, `/admin/**`
 - **Form Login:** `loginPage=/login`, `defaultSuccessUrl=/products`
 - **Logout:** `/logout` (POST)
 - **CSRF:** Disabled (API compatibility)
 - **Roles:** CUSTOMER, SELLER, ADMIN
 
 ### Services
-- `UserService`: register, findByEmail, requestSeller, approveSeller, suspendSeller, pendingSellers
-- `ProductService`: CRUD, search, stock management
+- `UserService`: register, findByEmail, requestSeller, approveSeller, suspendSeller, pendingSellers, allSellers, revokeSellerRequest
+- `ProductService`: CRUD, search, stock management, findBySellerId
 - `CartService`: session-based cart (HttpSession)
-- `OrderService`: checkout (transactional: create order, reduce stock, clear cart), findByUser
+- `OrderService`: checkout (transactional), buyerOrders, sellerOrders, updateStatus
 
 ### Repositories (JdbcTemplate)
-- `UserRepository`: findByEmail, requestSeller, findBySellerStatus, updateSellerStatus, save
-- `ProductRepository`: findAll, findById, findByCategory, search, updateStock, save (with seller_id)
+- `UserRepository`: findByEmail, requestSeller, findBySellerStatus, findBySellerRole, revokeSellerRequest, updateSellerStatus, save
+- `ProductRepository`: findAll, findById, findByCategory, search, findBySellerId, updateStock, save, deleteByIdAndSellerId
 - `CartRepository`: findByUserId, addItem, updateQuantity, removeItem, clear
-- `OrderRepository`: save, findByUserId, findBySellerId
+- `OrderRepository`: save, findByUserId, findBySellerId, updateStatus
 
 ---
 
 ## 🎨 Frontend Implementation
 
-### Templates (19 total)
+### Templates (25 total)
 | Template | Purpose |
 |----------|---------|
 | `index.html` | Homepage with hero, features, CTA |
@@ -155,12 +169,15 @@ orders: id, user_id, total_amount, status, shipping_address, created_at
 | `profile/view.html` | Profile info, role badges, edit form, seller request CTA |
 | `seller/request.html` | Seller application form |
 | `seller/dashboard.html` | Stats, quick actions, recent orders/products |
-| `admin/sellers.html` | Pending sellers table with approve/suspend buttons |
+| `seller/products/list.html` | Product table with edit/delete |
+| `seller/products/form.html` | Create/edit product form |
+| `seller/orders/list.html` | Order management with status dropdown |
+| `admin/sellers.html` | Pending + All Sellers tables with actions |
 | `fragments/navbar.html` | Responsive navbar with auth-aware dropdown |
 | `fragments/footer.html` | Footer fragment |
 | `error/404.html`, `error/500.html` | Error pages |
 
-### CSS (style.css ~573 lines)
+### CSS (style.css ~600 lines)
 - CSS Grid/Flexbox layouts
 - Responsive breakpoints (mobile-first)
 - Component styles: cards, forms, tables, badges, buttons, dropdowns
@@ -201,8 +218,7 @@ orders: id, user_id, total_amount, status, shipping_address, created_at
 
 ### High Priority
 - [ ] **Order Detail View** - `/orders/{id}` page (currently redirects to list)
-- [ ] **Product CRUD UI** - `/seller/products` (list), `/seller/products/new` (create), `/seller/products/{id}/edit`
-- [ ] **Seller Order Management** - `/seller/orders` with status update buttons
+- [ ] **Seller Profile/Store Settings** - Store name, description, logo
 - [ ] **Admin Dashboard** - `/admin` overview (users, orders, revenue stats)
 
 ### Medium Priority
@@ -231,7 +247,8 @@ orders: id, user_id, total_amount, status, shipping_address, created_at
 
 ## 🚀 Verification Status
 
-**All 13 core checks PASSED:**
+**All core + seller/admin checks PASSED (23 total):**
+
 ```
 ✅ Checkout page          ✅ Submit checkout      ✅ Success page
 ✅ Cart cleared           ✅ Order history        ✅ Order shows
@@ -240,6 +257,9 @@ orders: id, user_id, total_amount, status, shipping_address, created_at
 ✅ API categories         ✅ Seller request page  ✅ Seller request submit
 ✅ Admin sellers page     ✅ Approve seller       ✅ Seller removed from pending
 ✅ Seller dashboard       ✅ Navbar seller link
+✅ Admin revoke pending   ✅ Admin all sellers    ✅ Suspend/Reactivate
+✅ Seller products list   ✅ Create product page  ✅ Create product submit
+✅ Edit product page      ✅ Seller orders page   ✅ Status updates
 ```
 
 ---
@@ -248,7 +268,9 @@ orders: id, user_id, total_amount, status, shipping_address, created_at
 
 1. **Run locally:** `./mvnw spring-boot:run` (requires PostgreSQL + DB config in `.env`)
 2. **DB Config:** `application.properties` uses `${DB_URL}`, `${DB_USERNAME}`, `${DB_PASSWORD}`
-3. **Seeded Users:** admin@test.com / password123 (ADMIN role)
+3. **Seeded Users:** 
+   - `admin@test.com` / `password123` (ADMIN role)
+   - `evidence@test.com` / `password123` (APPROVED SELLER)
 4. **API Docs:** See `API_DOCUMENTATION.md` for full endpoint reference
 5. **Architecture:** POJO models + JdbcTemplate repos + REST controllers + Thymeleaf MVC views
 6. **No JPA/Hibernate** - Pure JdbcTemplate for performance and control
