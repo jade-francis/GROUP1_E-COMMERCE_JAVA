@@ -75,6 +75,7 @@ public class ProductRepository {
                 INSERT INTO products
                     (name, description, price, stock_quantity, category_id, image_url, seller_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
