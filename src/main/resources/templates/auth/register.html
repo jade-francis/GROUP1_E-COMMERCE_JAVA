@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register - Group 1 Store</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="auth-page">
+    <div class="auth-card">
+        <h1>Create an account</h1>
+
+        <p class="form-error" th:if="${registerError}" th:text="${registerError}"></p>
+
+        <form th:action="@{/register}" th:object="${user}" method="post">
+            <label for="name">Name</label>
+            <input type="text" id="name" th:field="*{name}">
+            <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}">
+            <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" th:field="*{password}">
+            <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
+            <button type="submit" class="button">Register</button>
+        </form>
+
+        <p class="auth-switch">
+            Already have an account? <a th:href="@{/login}">Log in</a>
+        </p>
+    </div>
+</main>
+
+</body>
+</html>

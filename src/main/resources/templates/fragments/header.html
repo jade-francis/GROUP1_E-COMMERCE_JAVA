@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<header class="site-header" th:fragment="header">
+    <a class="brand" th:href="@{/}">
+        Group 1 Store
+    </a>
+
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/products}">Products</a>
+        <a th:href="@{/cart}">Cart</a>
+
+        <span sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/register}">Register</a>
+        </span>
+
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/orders}">Orders</a>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="link-button">Logout</button>
+            </form>
+        </span>
+    </nav>
+</header>
+
+</body>
+</html>

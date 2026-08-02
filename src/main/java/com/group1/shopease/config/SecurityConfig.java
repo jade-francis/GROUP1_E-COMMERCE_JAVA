@@ -23,7 +23,9 @@
                       "/",
                       "/css/**",
                       "/js/**",
-                      "/images/**"
+                      "/images/**",
+                      "/login",
+                      "/register"
                   ).permitAll()
                   .requestMatchers("/api/auth/seller-request").authenticated()
                   .requestMatchers("/api/auth/**").permitAll()
@@ -36,7 +38,16 @@
                   .requestMatchers("/admin/**").hasRole("ADMIN")
                   .anyRequest().authenticated()
               )
-              .csrf(csrf -> csrf.disable());
+              .formLogin(form -> form
+                  .loginPage("/login")
+                  .defaultSuccessUrl("/", true)
+                  .permitAll()
+              )
+              .logout(logout -> logout
+                  .logoutSuccessUrl("/")
+                  .permitAll()
+              )
+              .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
 
           return http.build();
       }

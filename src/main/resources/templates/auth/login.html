@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Log in - Group 1 Store</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main class="auth-page">
+    <div class="auth-card">
+        <h1>Log in</h1>
+
+        <p class="form-success" th:if="${param.registered}">
+            Account created. You can log in now.
+        </p>
+
+        <p class="form-error" th:if="${param.error}">
+            Invalid email or password.
+        </p>
+
+        <p class="form-success" th:if="${param.logout}">
+            You have been logged out.
+        </p>
+
+        <form th:action="@{/login}" method="post">
+            <label for="username">Email</label>
+            <input type="email" id="username" name="username" required autofocus>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="button">Log in</button>
+        </form>
+
+        <p class="auth-switch">
+            Don't have an account? <a th:href="@{/register}">Register</a>
+        </p>
+    </div>
+</main>
+
+</body>
+</html>

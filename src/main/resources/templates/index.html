@@ -11,17 +11,7 @@
   </head>
   <body>
 
-  <header class="site-header">
-      <a class="brand" th:href="@{/}">
-          Group 1 Store
-      </a>
-
-      <nav>
-          <a th:href="@{/}">Home</a>
-          <a th:href="@{/products}">Products</a>
-          <a th:href="@{/cart}">Cart</a>
-      </nav>
-  </header>
+  <div th:replace="~{fragments/header :: header}"></div>
 
   <main class="hero">
       <p class="eyebrow">Welcome to our store</p>
