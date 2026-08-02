@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - ShopEase</title>
+    <title>Admin Dashboard - Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -39,6 +39,7 @@
         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
             <a th:href="@{/admin/products}" class="btn btn-primary">Manage Products</a>
             <a th:href="@{/admin/sellers}" class="btn btn-secondary">Manage Sellers</a>
+            <a th:href="@{/admin/users}" class="btn btn-secondary">Manage Users</a>
         </div>
     </section>
 </main>
@@ -46,3 +47,4 @@
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>
 </html>
+

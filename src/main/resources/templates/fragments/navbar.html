@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopEase</title>
+    <title>Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -11,13 +11,15 @@
 <nav class="navbar" th:fragment="navbar">
     <div class="navbar-container">
         <a class="navbar-brand" th:href="@{/}">
-            ShopEase
+            <img th:src="@{/images/logo.svg}" alt="Shopease logo">
+            <span><strong>Shopease</strong><small>Your trusted marketplace</small></span>
         </a>
 
         <ul class="navbar-nav">
             <li><a th:href="@{/}" class="nav-link">Home</a></li>
             <li><a th:href="@{/products}" class="nav-link">Products</a></li>
-            <li><a th:href="@{/cart}" class="nav-link">Cart</a></li>
+            <li><a th:href="@{/cart}" class="nav-link nav-cart">Cart</a></li>
+            <li><button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark mode" title="Switch theme"><span aria-hidden="true"></span></button></li>
 
             <li sec:authorize="!isAuthenticated()">
                 <a th:href="@{/login}" class="nav-link">Login</a>
@@ -28,10 +30,11 @@
 
             <!-- Authenticated user dropdown -->
             <li sec:authorize="isAuthenticated()" class="navbar-user">
-                <a class="navbar-user-btn" href="#">
+                <button class="navbar-user-btn" type="button">
                     <span class="navbar-user-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">U</span>
-                    <span sec:authentication="name"></span>
-                </a>
+                    <span sec:authorize="hasRole('ADMIN')">Admin</span>
+                    <span sec:authorize="!hasRole('ADMIN')" th:text="${currentUser != null ? currentUser.name : #authentication.name}"></span>
+                </button>
                 <div class="navbar-user-dropdown">
                     <div class="navbar-user-dropdown-header">
                         <div class="navbar-user-dropdown-name" sec:authentication="name"></div>
@@ -63,22 +66,26 @@
                     </a>
                     
                     <div class="navbar-user-dropdown-divider"></div>
-                    <form th:action="@{/logout}" method="post" style="margin: 0;">
-                        <button type="submit" class="navbar-user-dropdown-item" style="width: 100%; text-align: left; border: none; background: none; font: inherit; cursor: pointer; padding: 10px 16px; color: #344054; font-size: 14px;">
+                    <form th:action="@{/logout}" method="post" class="navbar-logout-form">
+                        <button type="submit" class="navbar-user-dropdown-item navbar-logout-button">
                             Logout
                         </button>
                     </form>
                 </div>
             </li>
         </ul>
+        <script th:src="@{/js/app.js(v=2)}"></script>
     </div>
 </nav>
 
 <footer class="footer" th:fragment="footer">
     <div class="footer-container">
-        <p>&copy; 2026 ShopEase. All rights reserved.</p>
+        <div class="footer-brand"><img th:src="@{/images/logo.svg}" alt="Shopease logo"><div><strong>Shopease</strong><span>Good finds. Trusted sellers. Easy shopping.</span></div></div>
+        <div class="footer-links"><a th:href="@{/products}">Shop</a><a th:href="@{/cart}">Cart</a><a th:href="@{/orders}">Orders</a><a th:href="@{/seller/request}">Sell with us</a></div>
+        <p>&copy; 2026 Shopease. All rights reserved.</p>
     </div>
 </footer>
 
 </body>
 </html>
+

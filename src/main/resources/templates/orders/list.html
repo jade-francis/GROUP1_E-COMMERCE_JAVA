@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order History - ShopEase</title>
+    <title>Order History - Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -29,7 +29,7 @@
                 </div>
                 <div style="display: flex; gap: 12px; align-items: center;">
                     <span class="product-stock" th:classappend="${order.status == 'DELIVERED'} ? ' delivered' : (${order.status == 'CANCELLED'} ? ' cancelled' : '')" th:text="${order.status}">PENDING</span>
-                    <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                    <span class="product-price" th:text="'₦' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">₦0.00</span>
                 </div>
             </div>
             <div class="order-details" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
@@ -52,3 +52,4 @@
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>
 </html>
+

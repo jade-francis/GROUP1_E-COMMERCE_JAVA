@@ -22,4 +22,20 @@ public class AuthController {
     public String currentUser(java.security.Principal principal) { return principal.getName(); }
     @PostMapping("/seller-request")
     public User sellerRequest(java.security.Principal principal) { return userService.requestSeller(principal.getName()); }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<PasswordResetRequested> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        userService.createPasswordResetToken(request.email());
+        return ResponseEntity.ok(new PasswordResetRequested("If that email is registered, a reset link has been created."));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<PasswordResetRequested> resetPassword(@RequestBody ResetPasswordRequest request) {
+        userService.resetPassword(request.token(), request.password());
+        return ResponseEntity.ok(new PasswordResetRequested("Password reset successfully."));
+    }
+
+    public record ForgotPasswordRequest(String email) {}
+    public record ResetPasswordRequest(String token, String password) {}
+    public record PasswordResetRequested(String message) {}
 }

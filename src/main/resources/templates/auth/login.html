@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ShopEase</title>
+    <title>Login - Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -15,6 +15,7 @@
         <p class="subtitle">Sign in to your account</p>
 
         <form th:action="@{/login}" method="post" class="auth-form">
+            <div th:if="${passwordReset}" class="alert alert-success">Your password has been changed. You can sign in now.</div>
             <div th:if="${param.error}" class="error-message">
                 Invalid email or password
             </div>
@@ -25,7 +26,7 @@
             </div>
 
             <div class="form-group">
-                <label for="password">Password</label>
+                <div class="form-label-row"><label for="password">Password</label><a th:href="@{/forgot-password}">Forgot password?</a></div>
                 <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
 
@@ -41,3 +42,4 @@
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>
 </html>
+

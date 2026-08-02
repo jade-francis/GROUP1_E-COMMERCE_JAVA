@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - ShopEase</title>
+    <title>Products - Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="product-info">
                     <h3 th:text="${product.name}">Product Name</h3>
-                    <p class="product-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
+                    <p class="product-price" th:text="'₦' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">₦0.00</p>
                     <p class="product-stock" th:text="${product.stockQuantity} + ' in stock'">In stock</p>
                     <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-primary">View Details</a>
                 </div>
@@ -55,3 +55,4 @@
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>
 </html>
+

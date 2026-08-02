@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -55,7 +55,7 @@
                                   th:text="${order.status}">PENDING</span>
                         </td>
                         <td>
-                            <strong th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">$0.00</strong>
+                            <strong th:text="'₦' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">₦0.00</strong>
                         </td>
                         <td>
                             <span th:text="${order.itemCount + ' item(s)'}">0 items</span>

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller Dashboard - ShopEase</title>
+    <title>Seller Dashboard - Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -27,11 +27,11 @@
         </div>
         <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
             <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Total Sales</h3>
-            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #059669;" th:text="'$' + ${#numbers.formatDecimal(totalSales, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #059669;" th:text="'₦' + ${#numbers.formatDecimal(totalSales, 1, 'COMMA', 2, 'POINT')}">₦0.00</p>
         </div>
         <div class="stat-card" style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
             <h3 style="margin: 0 0 8px; font-size: 14px; color: #6b7280; font-weight: 500;">Revenue (30 days)</h3>
-            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #172033;" th:text="'$' + ${#numbers.formatDecimal(revenue30Days, 1, 'COMMA', 2, 'POINT')}">$0.00</p>
+            <p style="margin: 0; font-size: 32px; font-weight: 700; color: #172033;" th:text="'₦' + ${#numbers.formatDecimal(revenue30Days, 1, 'COMMA', 2, 'POINT')}">₦0.00</p>
         </div>
     </section>
 
@@ -64,7 +64,7 @@
                     <td th:text="'#' + ${order.id}">#1</td>
                     <td th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy')}">Date</td>
                     <td><span class="status-badge" th:text="${order.status}">PENDING</span></td>
-                    <td th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                    <td th:text="'₦' + ${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 2, 'POINT')}">₦0.00</td>
                 </tr>
                 </tbody>
             </table>
@@ -89,7 +89,7 @@
                 <tbody>
                 <tr th:each="product : ${recentProducts}">
                     <td th:text="${product.name}">Product</td>
-                    <td th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">$0.00</td>
+                    <td th:text="'₦' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">₦0.00</td>
                     <td th:text="${product.stockQuantity}">0</td>
                 </tr>
                 </tbody>
@@ -101,3 +101,4 @@
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>
 </html>
+

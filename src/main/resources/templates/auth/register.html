@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - ShopEase</title>
+    <title>Register - Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -12,7 +12,7 @@
 <main class="container">
     <div class="auth-page">
         <h1>Create Account</h1>
-        <p class="subtitle">Join ShopEase today</p>
+        <p class="subtitle">Join Shopease today</p>
 
         <form th:action="@{/api/auth/register}" method="post" class="auth-form" id="registerForm">
             <div th:if="${param.error}" class="error-message" th:text="${param.error[0]}">

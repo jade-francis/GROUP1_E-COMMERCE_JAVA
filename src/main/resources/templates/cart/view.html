@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - ShopEase</title>
+    <title>Shopping Cart - Shopease</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -42,7 +42,7 @@
                     </div>
                 </td>
                 <td>
-                    <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(item.unitPrice, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                    <span class="product-price" th:text="'₦' + ${#numbers.formatDecimal(item.unitPrice, 1, 'COMMA', 2, 'POINT')}">₦0.00</span>
                 </td>
                 <td>
                     <form th:action="@{/cart/update}" method="post" class="cart-qty">
@@ -51,7 +51,7 @@
                     </form>
                 </td>
                 <td>
-                    <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(item.lineTotal, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                    <span class="product-price" th:text="'₦' + ${#numbers.formatDecimal(item.lineTotal, 1, 'COMMA', 2, 'POINT')}">₦0.00</span>
                 </td>
                 <td>
                     <form th:action="@{/cart/remove}" method="post" style="display: inline;">
@@ -66,7 +66,7 @@
         <div class="cart-summary">
             <div class="cart-summary-row">
                 <span>Subtotal</span>
-                <span th:text="'$' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                <span th:text="'₦' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">₦0.00</span>
             </div>
             <div class="cart-summary-row">
                 <span>Shipping</span>
@@ -74,7 +74,7 @@
             </div>
             <div class="cart-summary-row total">
                 <span>Total</span>
-                <span th:text="'$' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">$0.00</span>
+                <span th:text="'₦' + ${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')}">₦0.00</span>
             </div>
             <div class="cart-actions">
                 <a th:href="@{/products}" class="btn btn-secondary">Continue Shopping</a>
@@ -87,3 +87,4 @@
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>
 </html>
+
