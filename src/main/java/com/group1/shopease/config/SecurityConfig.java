@@ -9,6 +9,8 @@
   import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
   import org.springframework.http.HttpMethod;
   import org.springframework.security.web.SecurityFilterChain;
+  import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+  import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
   @Configuration
   public class SecurityConfig {
@@ -23,11 +25,20 @@
                       "/",
                       "/css/**",
                       "/js/**",
-                      "/images/**"
+                      "/images/**",
+                      "/products",
+                      "/products/**",
+                      "/cart",
+                      "/cart/**",
+                      "/login",
+                      "/register",
+                      "/checkout",
+                      "/checkout/**"
                   ).permitAll()
                   .requestMatchers("/api/auth/seller-request").authenticated()
                   .requestMatchers("/api/auth/**").permitAll()
                   .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                  .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                   .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("SELLER")
                   .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("SELLER")
                   .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("SELLER")
@@ -35,6 +46,22 @@
                   .requestMatchers("/api/admin/**").hasRole("ADMIN")
                   .requestMatchers("/admin/**").hasRole("ADMIN")
                   .anyRequest().authenticated()
+              )
+              .sessionManagement(session -> session
+                  .sessionFixation().migrateSession()
+              )
+              .formLogin(form -> form
+                  .loginPage("/login")
+                  .loginProcessingUrl("/login")
+                  .defaultSuccessUrl("/products", true)
+                  .failureUrl("/login?error=true")
+                  .usernameParameter("email")
+                  .permitAll()
+              )
+              .logout(logout -> logout
+                  .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                  .logoutSuccessUrl("/")
+                  .permitAll()
               )
               .csrf(csrf -> csrf.disable());
 

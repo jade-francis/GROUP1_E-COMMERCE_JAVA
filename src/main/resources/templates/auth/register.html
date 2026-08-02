@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <div class="auth-page">
+        <h1>Create Account</h1>
+        <p class="subtitle">Join Group 1 Store today</p>
+
+        <form th:action="@{/api/auth/register}" method="post" class="auth-form" id="registerForm">
+            <div th:if="${param.error}" class="error-message" th:text="${param.error[0]}">
+                Registration error
+            </div>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required autocomplete="name" th:value="${param.name}">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autocomplete="email" th:value="${param.email}">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="new-password" minlength="8">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Create Account</button>
+        </form>
+
+        <p class="auth-footer">
+            Already have an account? <a th:href="@{/login}">Sign in</a>
+        </p>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+        
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                window.location.href = '/login?registered=true';
+            } else {
+                const error = await response.json();
+                alert(error.message || 'Registration failed');
+            }
+        } catch (err) {
+            alert('Network error');
+        }
+    });
+</script>
+</body>
+</html>

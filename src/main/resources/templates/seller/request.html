@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Seller - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <header class="page-header">
+        <h1>Become a Seller</h1>
+    </header>
+
+    <div class="auth-page" style="max-width: 600px;">
+        <div class="seller-request-section">
+            <h2>Start Selling on Group 1 Store</h2>
+            <p>Join our marketplace and reach thousands of customers. Once approved, you'll get access to the Seller Dashboard to manage your products, track orders, and grow your business.</p>
+            
+            <div class="benefits">
+                <h3>Why sell with us?</h3>
+                <ul>
+                    <li>Low commission rates</li>
+                    <li>Access to our customer base</li>
+                    <li>Easy product management</li>
+                    <li>Order tracking & fulfillment</li>
+                    <li>Sales analytics</li>
+                </ul>
+            </div>
+
+            <form th:action="@{/seller/request}" method="post">
+                <div class="form-group">
+                    <label for="reason">Why do you want to sell on our platform? (Optional)</label>
+                    <textarea id="reason" name="reason" rows="4" 
+                              placeholder="Tell us about your products, experience, or why you'd like to join..."
+                              style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <div th:if="${error}" class="error-message" style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+                    <span th:text="${error}">Error</span>
+                </div>
+                <div th:if="${success}" class="success-message" style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+                    <span th:text="${success}">Success</span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Submit Request</button>
+            </form>
+
+            <p class="auth-footer" style="margin-top: 24px;">
+                <a th:href="@{/profile}">Back to Profile</a>
+            </p>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

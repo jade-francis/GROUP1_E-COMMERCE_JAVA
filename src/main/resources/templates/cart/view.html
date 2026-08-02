@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <header class="page-header">
+        <h1>Shopping Cart</h1>
+    </header>
+
+    <div th:if="${items.isEmpty()}" class="empty-state">
+        <h2>Your cart is empty</h2>
+        <p>Looks like you haven't added anything yet.</p>
+        <a th:href="@{/products}" class="btn btn-primary">Continue Shopping</a>
+    </div>
+
+    <div th:unless="${items.isEmpty()}">
+        <table class="cart-table">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${items}">
+                <td>
+                    <div class="cart-product">
+                        <img th:src="@{${item.imageUrl ?: '/images/placeholder.jpg'}}" th:alt="${item.productName}" onerror="this.src='/images/placeholder.jpg'">
+                        <div class="cart-product-info">
+                            <h3 th:text="${item.productName}">Product</h3>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(item.unitPrice, 1, 2, 'COMMA')}">$0.00</span>
+                </td>
+                <td>
+                    <form th:action="@{/cart/update}" method="post" class="cart-qty">
+                        <input type="hidden" name="productId" th:value="${item.id}">
+                        <input type="number" name="quantity" th:value="${item.quantity}" min="1" th:max="${item.availableStock}" required>
+                    </form>
+                </td>
+                <td>
+                    <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(item.lineTotal, 1, 2, 'COMMA')}">$0.00</span>
+                </td>
+                <td>
+                    <form th:action="@{/cart/remove}" method="post" style="display: inline;">
+                        <input type="hidden" name="productId" th:value="${item.id}">
+                        <button type="submit" class="btn btn-ghost btn-sm" title="Remove">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <div class="cart-summary-row">
+                <span>Subtotal</span>
+                <span th:text="'$' + ${#numbers.formatDecimal(total, 1, 2, 'COMMA')}">$0.00</span>
+            </div>
+            <div class="cart-summary-row">
+                <span>Shipping</span>
+                <span>Calculated at checkout</span>
+            </div>
+            <div class="cart-summary-row total">
+                <span>Total</span>
+                <span th:text="'$' + ${#numbers.formatDecimal(total, 1, 2, 'COMMA')}">$0.00</span>
+            </div>
+            <div class="cart-actions">
+                <a th:href="@{/products}" class="btn btn-secondary">Continue Shopping</a>
+                <a th:href="@{/checkout}" class="btn btn-primary">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

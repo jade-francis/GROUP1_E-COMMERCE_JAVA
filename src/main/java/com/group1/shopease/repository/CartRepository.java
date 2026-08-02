@@ -12,13 +12,13 @@ public class CartRepository {
     public CartRepository(JdbcTemplate jdbc) { this.jdbc = jdbc; }
     public List<CartItem> findByUser(long userId) {
         return jdbc.query("""
-                SELECT c.id, c.product_id, p.name, p.price, c.quantity, p.stock_quantity
+                SELECT c.id, c.product_id, p.name, p.price, c.quantity, p.stock_quantity, p.image_url
                 FROM cart_items c JOIN products p ON p.id = c.product_id
                 WHERE c.user_id = ? ORDER BY c.id
                 """, (rs, n) -> {
             BigDecimal price = rs.getBigDecimal("price"); int qty = rs.getInt("quantity");
             return new CartItem(rs.getLong("id"), rs.getLong("product_id"), rs.getString("name"), price,
-                    qty, rs.getInt("stock_quantity"), price.multiply(BigDecimal.valueOf(qty)));
+                    qty, rs.getInt("stock_quantity"), price.multiply(BigDecimal.valueOf(qty)), rs.getString("image_url"));
         }, userId);
     }
     public void addOrUpdate(long userId, long productId, int quantity) {

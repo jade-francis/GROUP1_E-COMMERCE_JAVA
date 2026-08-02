@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product.name} + ' - Group 1 Store'">Product - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <nav class="breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span>/</span>
+        <a th:href="@{/products}">Products</a>
+        <span>/</span>
+        <span th:text="${product.name}">Product</span>
+    </nav>
+
+    <article class="product-detail">
+        <div class="product-gallery">
+            <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" class="product-main-image" onerror="this.src='/images/placeholder.jpg'">
+        </div>
+
+        <div class="product-details">
+            <h1 th:text="${product.name}">Product Name</h1>
+
+            <div class="product-meta">
+                <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2, 'COMMA')}">$0.00</span>
+                <span class="product-stock" th:text="${product.stockQuantity} + ' in stock'">In stock</span>
+            </div>
+
+            <div class="product-description">
+                <h3>Description</h3>
+                <p th:text="${product.description}">Product description goes here.</p>
+            </div>
+
+            <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
+                <input type="hidden" name="productId" th:value="${product.id}">
+                <div class="quantity-selector">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" th:max="${product.stockQuantity}" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" th:disabled="${product.stockQuantity == 0}">
+                    <span th:if="${product.stockQuantity > 0}">Add to Cart</span>
+                    <span th:if="${product.stockQuantity == 0}">Out of Stock</span>
+                </button>
+            </form>
+        </div>
+    </article>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - Group 1 Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container">
+    <header class="page-header">
+        <h1>Order History</h1>
+    </header>
+
+    <div th:if="${orders.isEmpty()}" class="empty-state">
+        <h2>No orders yet</h2>
+        <p>When you place orders, they'll appear here.</p>
+        <a th:href="@{/products}" class="btn btn-primary">Start Shopping</a>
+    </div>
+
+    <div th:unless="${orders.isEmpty()}">
+        <div th:each="order : ${orders}" class="order-card" style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+            <div class="order-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <h3 style="margin: 0 0 4px; font-size: 18px;">Order <span th:text="'#' + ${order.id}">#12345</span></h3>
+                    <p style="margin: 0; color: #6b7280; font-size: 14px;" th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy HH:mm')}">Date</p>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <span class="product-stock" th:classappend="${order.status == 'DELIVERED'} ? ' delivered' : (${order.status == 'CANCELLED'} ? ' cancelled' : '')" th:text="${order.status}">PENDING</span>
+                    <span class="product-price" th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 2, 'COMMA')}">$0.00</span>
+                </div>
+            </div>
+            <div class="order-details" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                <div>
+                    <p style="margin: 0 0 4px; font-size: 13px; color: #6b7280;">Shipping Address</p>
+                    <p style="margin: 0; font-size: 14px;" th:text="${order.shippingAddress}">Address</p>
+                </div>
+                <div>
+                    <p style="margin: 0 0 4px; font-size: 13px; color: #6b7280;">Payment Status</p>
+                    <p style="margin: 0; font-size: 14px;" th:text="${order.paymentStatus}">PENDING</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>
