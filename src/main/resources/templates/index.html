@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopease</title>
+    <title>ShopEase</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -12,7 +12,7 @@
 <main class="container">
     <section class="hero">
         <div class="hero-copy">
-            <p class="eyebrow">Welcome to Shopease</p>
+            <p class="eyebrow">Welcome to ShopEase</p>
             <h1>Shop what you love, from sellers you trust.</h1>
             <p class="hero-subtitle">
                 Browse curated electronics, fashion and home essentials —
@@ -21,24 +21,36 @@
             </p>
             <div class="hero-actions">
                 <a class="btn btn-primary btn-lg" th:href="@{/products}">Browse Products</a>
-                <a class="btn btn-secondary btn-lg" th:href="@{/register}">Create an Account</a>
+                <a class="btn btn-secondary btn-lg" th:href="@{/register}" sec:authorize="!isAuthenticated()">Create an Account</a>
             </div>
         </div>
-        <div class="hero-art" aria-hidden="true">
-            <svg viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="180" cy="160" r="150" fill="var(--color-primary-light)"/>
-                <rect x="70" y="120" width="180" height="140" rx="16" fill="white" stroke="var(--color-border)" stroke-width="2"/>
-                <rect x="70" y="120" width="180" height="40" rx="16" fill="var(--color-primary)"/>
-                <circle cx="96" cy="140" r="6" fill="white" opacity="0.8"/>
-                <circle cx="116" cy="140" r="6" fill="white" opacity="0.5"/>
-                <rect x="94" y="180" width="120" height="10" rx="5" fill="var(--color-border)"/>
-                <rect x="94" y="200" width="80" height="10" rx="5" fill="var(--color-border)"/>
-                <rect x="94" y="228" width="60" height="18" rx="9" fill="var(--color-primary-light)"/>
-                <circle cx="250" cy="90" r="34" fill="white" stroke="var(--color-border)" stroke-width="2"/>
-                <path d="M236 90l10 10 18-20" fill="none" stroke="var(--color-success)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="40" y="215" width="56" height="56" rx="14" fill="white" stroke="var(--color-border)" stroke-width="2"/>
-                <path d="M56 240h24M68 228v24" stroke="var(--color-primary)" stroke-width="4" stroke-linecap="round"/>
-            </svg>
+        <div class="hero-art">
+            <img th:src="@{/images/hero.jpg}"
+                 src="/images/hero.jpg"
+                 alt="Shopper presenting colorful shopping bags">
+        </div>
+    </section>
+
+    <section class="home-products">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Featured products</p>
+                <h2>Popular picks for you</h2>
+            </div>
+            <a class="btn btn-secondary" th:href="@{/products}">View All Products</a>
+        </div>
+        <div class="products-grid">
+            <article th:each="product : ${featuredProducts}" class="product-card">
+                <div class="product-image">
+                    <img th:src="${product.imageUrl ?: '/images/placeholder.svg'}" th:alt="${product.name}" onerror="this.onerror=null;this.src='/images/placeholder.svg'">
+                </div>
+                <div class="product-info">
+                    <h3 th:text="${product.name}">Product Name</h3>
+                    <p class="product-price" th:text="'₦' + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')}">₦0.00</p>
+                    <p class="product-stock" th:text="${product.stockQuantity} + ' in stock'">In stock</p>
+                    <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-primary">View Details</a>
+                </div>
+            </article>
         </div>
     </section>
 

@@ -5,6 +5,7 @@ import com.group1.shopease.model.Product;
 import com.group1.shopease.model.User;
 import com.group1.shopease.repository.CategoryRepository;
 import com.group1.shopease.service.ProductService;
+import com.group1.shopease.service.ImageStorageService;
 import com.group1.shopease.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
@@ -29,11 +31,14 @@ public class SellerProductController {
     private final ProductService productService;
     private final UserService userService;
     private final CategoryRepository categoryRepository;
+    private final ImageStorageService imageStorageService;
 
-    public SellerProductController(ProductService productService, UserService userService, CategoryRepository categoryRepository) {
+    public SellerProductController(ProductService productService, UserService userService, CategoryRepository categoryRepository,
+                                   ImageStorageService imageStorageService) {
         this.productService = productService;
         this.userService = userService;
         this.categoryRepository = categoryRepository;
+        this.imageStorageService = imageStorageService;
     }
 
     private User getCurrentSeller() {
@@ -72,6 +77,7 @@ public class SellerProductController {
     @PostMapping
     public String createProduct(@Valid @ModelAttribute("product") Product product,
                                 BindingResult result,
+                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                                 RedirectAttributes redirectAttributes,
                                 Model model) {
         User seller = getCurrentSeller();
@@ -86,6 +92,8 @@ public class SellerProductController {
         }
         
         try {
+            String uploadedImageUrl = imageStorageService.storeProductImage(imageFile);
+            if (uploadedImageUrl != null) product.setImageUrl(uploadedImageUrl);
             productService.create(product, seller.getEmail());
             redirectAttributes.addFlashAttribute("success", "Product created successfully!");
             return "redirect:/seller/products";
@@ -122,6 +130,7 @@ public class SellerProductController {
     public String updateProduct(@PathVariable long id,
                                 @Valid @ModelAttribute("product") Product product,
                                 BindingResult result,
+                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                                 RedirectAttributes redirectAttributes,
                                 Model model) {
         User seller = getCurrentSeller();
@@ -136,6 +145,8 @@ public class SellerProductController {
         }
         
         try {
+            String uploadedImageUrl = imageStorageService.storeProductImage(imageFile);
+            if (uploadedImageUrl != null) product.setImageUrl(uploadedImageUrl);
             productService.update(id, product, seller.getEmail());
             redirectAttributes.addFlashAttribute("success", "Product updated successfully!");
             return "redirect:/seller/products";

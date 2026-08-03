@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 @Service
 public class ProductService {
@@ -27,6 +29,12 @@ public class ProductService {
 
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    public List<Product> findAllRandomized() {
+        List<Product> products = new ArrayList<>(productRepository.findAll());
+        Collections.shuffle(products);
+        return products;
     }
     public List<Product> search(String query, Long categoryId, int page, int size) {
         if (page < 0 || size < 1 || size > 100) throw new IllegalArgumentException("Invalid pagination");

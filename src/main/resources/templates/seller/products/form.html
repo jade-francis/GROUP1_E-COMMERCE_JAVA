@@ -19,7 +19,7 @@
     <div th:if="${error}" class="alert alert-error" th:text="${error}">Error message</div>
 
     <div class="profile-card" style="max-width: 700px;">
-        <form th:action="${isEdit} ? @{/seller/products/{id}(id=${product.id})} : @{/seller/products}" method="post" th:object="${product}" class="profile-form">
+        <form th:action="${isEdit} ? @{/seller/products/{id}(id=${product.id})} : @{/seller/products}" method="post" enctype="multipart/form-data" th:object="${product}" class="profile-form">
             
             <div class="form-group">
                 <label for="name">Product Name <span class="required">*</span></label>
@@ -68,6 +68,19 @@
                 <small class="form-hint">Leave blank to use placeholder image</small>
             </div>
 
+            <div class="form-group">
+                <label for="imageFile">Or upload an image</label>
+                <input type="file" id="imageFile" name="imageFile" accept="image/jpeg,image/png,image/webp,image/gif">
+                <small class="form-hint">Uploading a file takes priority over the image URL (maximum 8 MB).</small>
+            </div>
+
+            <div class="image-preview-wrap">
+                <span class="form-hint">Image preview</span>
+                <img id="imagePreview" class="product-image-preview"
+                     th:src="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl) ? product.imageUrl : '/images/placeholder.svg'}"
+                     alt="Product image preview" onerror="this.onerror=null;this.src='/images/placeholder.svg'">
+            </div>
+
             <div style="display: flex; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
                 <a th:href="@{/seller/products}" class="btn btn-secondary">Cancel</a>
                 <button type="submit" class="btn btn-primary" th:text="${isEdit} ? 'Update Product' : 'Create Product'">Submit</button>
@@ -75,6 +88,8 @@
         </form>
     </div>
 </main>
+
+<script th:src="@{/js/product-image-form.js}"></script>
 
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>

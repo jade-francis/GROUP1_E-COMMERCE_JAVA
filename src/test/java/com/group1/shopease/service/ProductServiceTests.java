@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -50,6 +51,17 @@ class ProductServiceTests {
         when(repository.deleteById(99L)).thenReturn(false);
 
         assertThrows(ProductNotFoundException.class, () -> service.delete(99L));
+    }
+
+    @Test
+    void randomizedProductsContainEveryRepositoryProduct() {
+        List<Product> products = List.of(product(1L), product(2L), product(3L));
+        when(repository.findAll()).thenReturn(products);
+
+        List<Product> randomized = service.findAllRandomized();
+
+        assertEquals(products.size(), randomized.size());
+        org.junit.jupiter.api.Assertions.assertTrue(randomized.containsAll(products));
     }
 
     private Product product(Long id) {

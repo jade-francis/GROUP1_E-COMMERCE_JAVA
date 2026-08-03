@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Shopease</title>
+    <title>Shopping Cart - ShopEase</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -35,7 +35,7 @@
             <tr th:each="item : ${items}">
                 <td>
                     <div class="cart-product">
-                        <img th:src="@{${item.imageUrl ?: '/images/placeholder.svg'}}" th:alt="${item.productName}" onerror="this.onerror=null;this.src='/images/placeholder.svg'">
+                        <img th:src="${item.imageUrl ?: '/images/placeholder.svg'}" th:alt="${item.productName}" onerror="this.onerror=null;this.src='/images/placeholder.svg'">
                         <div class="cart-product-info">
                             <h3 th:text="${item.productName}">Product</h3>
                         </div>

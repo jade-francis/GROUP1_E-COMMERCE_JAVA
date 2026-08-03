@@ -25,6 +25,6 @@ public class AdminAccountInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        users.upsertAdmin("Shopease Admin", email, passwordEncoder.encode(password));
+        users.upsertAdmin("ShopEase Admin", email, passwordEncoder.encode(password));
     }
 }

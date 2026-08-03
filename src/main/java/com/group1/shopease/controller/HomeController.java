@@ -1,13 +1,21 @@
- package com.group1.shopease.controller;
+package com.group1.shopease.controller;
 
-  import org.springframework.stereotype.Controller;
-  import org.springframework.web.bind.annotation.GetMapping;
+import com.group1.shopease.service.ProductService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-  @Controller
-  public class HomeController {
+@Controller
+public class HomeController {
+    private final ProductService productService;
 
-      @GetMapping("/")
-      public String home() {
-          return "index";
-      }
-  }
+    public HomeController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @GetMapping("/")
+    public String home(Model model) {
+        model.addAttribute("featuredProducts", productService.findAllRandomized().stream().limit(8).toList());
+        return "index";
+    }
+}

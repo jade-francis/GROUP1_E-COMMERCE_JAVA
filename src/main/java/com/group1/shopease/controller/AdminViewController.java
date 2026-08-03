@@ -5,6 +5,7 @@ import com.group1.shopease.model.User;
 import com.group1.shopease.repository.CategoryRepository;
 import com.group1.shopease.repository.OrderRepository;
 import com.group1.shopease.service.ProductService;
+import com.group1.shopease.service.ImageStorageService;
 import com.group1.shopease.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,13 +30,16 @@ public class AdminViewController {
     private final ProductService productService;
     private final CategoryRepository categoryRepository;
     private final OrderRepository orderRepository;
+    private final ImageStorageService imageStorageService;
 
     public AdminViewController(UserService userService, ProductService productService,
-                                CategoryRepository categoryRepository, OrderRepository orderRepository) {
+                                CategoryRepository categoryRepository, OrderRepository orderRepository,
+                                ImageStorageService imageStorageService) {
         this.userService = userService;
         this.productService = productService;
         this.categoryRepository = categoryRepository;
         this.orderRepository = orderRepository;
+        this.imageStorageService = imageStorageService;
     }
 
     @GetMapping
@@ -78,20 +84,38 @@ public class AdminViewController {
     }
 
     @PostMapping("/products")
-    public String createProduct(@ModelAttribute Product product) {
+    public String createProduct(@ModelAttribute Product product,
+                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                                RedirectAttributes attributes) {
         String guard = requireAdmin();
         if (guard != null) return guard;
 
-        productService.create(product);
+        try {
+            String uploadedImageUrl = imageStorageService.storeProductImage(imageFile);
+            if (uploadedImageUrl != null) product.setImageUrl(uploadedImageUrl);
+            productService.create(product);
+        } catch (IllegalArgumentException e) {
+            attributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/admin/products/new";
+        }
         return "redirect:/admin/products";
     }
 
     @PostMapping("/products/{id}")
-    public String updateProduct(@PathVariable long id, @ModelAttribute Product product) {
+    public String updateProduct(@PathVariable long id, @ModelAttribute Product product,
+                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                                RedirectAttributes attributes) {
         String guard = requireAdmin();
         if (guard != null) return guard;
 
-        productService.update(id, product);
+        try {
+            String uploadedImageUrl = imageStorageService.storeProductImage(imageFile);
+            if (uploadedImageUrl != null) product.setImageUrl(uploadedImageUrl);
+            productService.update(id, product);
+        } catch (IllegalArgumentException e) {
+            attributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/admin/products/" + id + "/edit";
+        }
         return "redirect:/admin/products";
     }
 

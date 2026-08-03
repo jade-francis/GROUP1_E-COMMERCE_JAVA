@@ -1,10 +1,10 @@
-# Shopease Backend API Documentation
+# ShopEase Backend API Documentation
 
-This document describes the backend currently implemented in the Shopease marketplace application.
+This document describes the backend currently implemented in the ShopEase marketplace application.
 
 ## 1. Overview
 
-Shopease is a marketplace with three user roles:
+ShopEase is a marketplace with three user roles:
 
 - `CUSTOMER`: browses products, manages a cart, and places orders.
 - `SELLER`: creates and manages owned products after admin approval.

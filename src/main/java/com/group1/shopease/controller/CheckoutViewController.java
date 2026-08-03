@@ -44,6 +44,7 @@ public class CheckoutViewController {
 
     @PostMapping
     public String processCheckout(@RequestParam String shippingAddress,
+                                   @RequestParam(defaultValue = "PAY_ON_DELIVERY") String paymentMethod,
                                    Authentication auth,
                                    Model model) {
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
@@ -52,7 +53,7 @@ public class CheckoutViewController {
         }
         try {
             String email = auth.getName();
-            var order = orderService.checkout(email, shippingAddress);
+            var order = orderService.checkout(email, shippingAddress, paymentMethod);
             return "redirect:/checkout/success?id=" + order.id();
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());

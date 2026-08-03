@@ -34,10 +34,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
                       "/login",
                       "/register",
                       "/forgot-password",
-                      "/reset-password",
-                      "/checkout",
-                      "/checkout/**"
+                      "/reset-password"
                   ).permitAll()
+                  .requestMatchers("/uploads/**").permitAll()
                   .requestMatchers("/api/auth/seller-request").authenticated()
                   .requestMatchers("/api/auth/**").permitAll()
                   .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()

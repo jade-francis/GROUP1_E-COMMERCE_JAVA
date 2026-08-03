@@ -33,7 +33,7 @@ public class AuthViewController {
             redirectAttributes.addFlashAttribute("resetToken", token);
             redirectAttributes.addFlashAttribute("resetUrl", "/reset-password?token=" + token);
             redirectAttributes.addFlashAttribute("message", "Email verified. Use the token below to reset your password.");
-        }, () -> redirectAttributes.addFlashAttribute("error", "No Shopease account was found with that email address."));
+        }, () -> redirectAttributes.addFlashAttribute("error", "No ShopEase account was found with that email address."));
         return "redirect:/forgot-password";
     }
 

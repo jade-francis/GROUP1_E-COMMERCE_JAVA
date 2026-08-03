@@ -16,8 +16,8 @@
     <groupId>com.group1.shopease</groupId>
     <artifactId>shopease</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shopease</name>
-    <description>Group 1 Shopease e-commerce application</description>
+    <name>ShopEase</name>
+    <description>Group 1 ShopEase e-commerce application</description>
 
     <properties>
         <java.version>21</java.version>

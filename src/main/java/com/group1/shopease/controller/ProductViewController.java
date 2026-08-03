@@ -26,11 +26,11 @@ public class ProductViewController {
     public String list(@RequestParam(required = false) Long categoryId, Model model) {
         List<Product> products;
         if (categoryId != null) {
-            products = productService.findAll().stream()
+            products = productService.findAllRandomized().stream()
                 .filter(p -> categoryId.equals(p.getCategoryId()))
                 .toList();
         } else {
-            products = productService.findAll();
+            products = productService.findAllRandomized();
         }
         model.addAttribute("products", products);
         model.addAttribute("selectedCategoryId", categoryId);

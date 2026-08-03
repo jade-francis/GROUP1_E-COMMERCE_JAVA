@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order History - Shopease</title>
+    <title>Order History - ShopEase</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -23,6 +23,10 @@
     <div th:unless="${orders.isEmpty()}">
         <div th:each="order : ${orders}" class="order-card" style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
             <div class="order-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <p style="margin: 0 0 4px; font-size: 13px; color: #6b7280;">Payment Method</p>
+                    <p style="margin: 0; font-size: 14px;" th:text="${order.paymentMethod == 'PAY_ON_DELIVERY' ? 'Pay on delivery' : order.paymentMethod}">Pay on delivery</p>
+                </div>
                 <div>
                     <h3 style="margin: 0 0 4px; font-size: 18px;">Order <span th:text="'#' + ${order.id}">#12345</span></h3>
                     <p style="margin: 0; color: #6b7280; font-size: 14px;" th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy HH:mm')}">Date</p>

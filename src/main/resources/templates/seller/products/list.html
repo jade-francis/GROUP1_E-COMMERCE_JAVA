@@ -46,7 +46,9 @@
                     <tbody>
                     <tr th:each="product : ${products}">
                         <td>
-                            <img th:src="${product.imageUrl}" alt="Product" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+                            <img th:src="${product.imageUrl ?: '/images/placeholder.svg'}" th:alt="${product.name}"
+                                 onerror="this.onerror=null;this.src='/images/placeholder.svg'"
+                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
                         </td>
                         <td>
                             <strong th:text="${product.name}">Product Name</strong>

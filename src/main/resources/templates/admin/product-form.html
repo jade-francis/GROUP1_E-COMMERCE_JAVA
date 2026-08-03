@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${product.id != null ? 'Edit Product' : 'Add Product'} + ' - Shopease'">Product Form - Shopease</title>
+    <title th:text="${product.id != null ? 'Edit Product' : 'Add Product'} + ' - ShopEase'">Product Form - ShopEase</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -14,8 +14,9 @@
         <h1 th:text="${product.id != null ? 'Edit Product' : 'Add New Product'}">Add New Product</h1>
     </header>
 
+    <div th:if="${error}" class="alert alert-error" th:text="${error}">Error</div>
     <div class="profile-card" style="max-width: 600px;">
-        <form th:action="${product.id != null ? '/admin/products/' + product.id : '/admin/products'}" method="post" class="profile-form">
+        <form th:action="${product.id != null ? '/admin/products/' + product.id : '/admin/products'}" method="post" enctype="multipart/form-data" class="profile-form">
             <div class="form-group">
                 <label for="name">Product Name</label>
                 <input type="text" id="name" name="name" th:value="${product.name}" required>
@@ -53,6 +54,17 @@
                 <label for="imageUrl">Image URL</label>
                 <input type="text" id="imageUrl" name="imageUrl" th:value="${product.imageUrl}" placeholder="/images/example.jpg">
             </div>
+            <div class="form-group">
+                <label for="imageFile">Or upload an image</label>
+                <input type="file" id="imageFile" name="imageFile" accept="image/jpeg,image/png,image/webp,image/gif">
+                <small class="form-hint">Uploading a file takes priority over the image URL (maximum 8 MB).</small>
+            </div>
+            <div class="image-preview-wrap">
+                <span class="form-hint">Image preview</span>
+                <img id="imagePreview" class="product-image-preview"
+                     th:src="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl) ? product.imageUrl : '/images/placeholder.svg'}"
+                     alt="Product image preview" onerror="this.onerror=null;this.src='/images/placeholder.svg'">
+            </div>
 
             <div style="display: flex; gap: 12px; margin-top: 8px;">
                 <button type="submit" class="btn btn-primary" th:text="${product.id != null ? 'Save Changes' : 'Add Product'}">Add Product</button>
@@ -61,6 +73,8 @@
         </form>
     </div>
 </main>
+
+<script th:src="@{/js/product-image-form.js}"></script>
 
 <div th:replace="~{fragments/navbar :: footer}"></div>
 </body>
