@@ -113,6 +113,12 @@ Flyway creates and updates the schema automatically when the application starts.
 | `SHOPEASE_ADMIN_EMAIL` | Yes | Email used to create or update the admin account |
 | `SHOPEASE_ADMIN_PASSWORD` | Yes | Admin password; use a strong production secret |
 | `SHOPEASE_UPLOAD_DIR` | No | Product upload directory; defaults to `uploads/products` |
+| `SPACES_ENDPOINT` | Production uploads | Spaces endpoint, for example `https://nyc3.digitaloceanspaces.com` |
+| `SPACES_REGION` | Production uploads | Spaces region, for example `nyc3` |
+| `SPACES_BUCKET` | Production uploads | Spaces bucket name |
+| `SPACES_ACCESS_KEY` | Production uploads | Spaces access key stored as a secret |
+| `SPACES_SECRET_KEY` | Production uploads | Spaces secret key stored as a secret |
+| `SPACES_PUBLIC_URL` | Production uploads | Public bucket or CDN base URL |
 
 Never commit `.env`. It is excluded by `.gitignore`.
 
@@ -135,6 +141,9 @@ URL and a file are supplied, the uploaded file takes priority.
 For production deployments, configure `SHOPEASE_UPLOAD_DIR` on persistent storage.
 Files stored on an ephemeral application filesystem will be lost after a restart
 or redeployment.
+
+When all `SPACES_*` variables are configured, uploads are sent to DigitalOcean
+Spaces instead of local disk. The Space must permit public reads for product images.
 
 ## Build And Test
 
@@ -172,6 +181,24 @@ java -jar target/shopease-0.0.1-SNAPSHOT.jar
 - Confirm all Flyway migrations run successfully during startup.
 - Use HTTPS through the hosting platform or reverse proxy.
 - Do not deploy the local `.env` file.
+
+## DigitalOcean App Platform
+
+The repository includes a production `Dockerfile` and an App Platform template at
+`.do/app.yaml`.
+
+1. Create a DigitalOcean Managed PostgreSQL database.
+2. Create a DigitalOcean Space and generate an access key.
+3. Edit `.do/app.yaml` and replace `YOUR_GITHUB_USERNAME/YOUR_REPOSITORY`.
+4. In DigitalOcean, create an app from the repository or import the app spec.
+5. Add the database and admin variables as encrypted runtime secrets.
+6. Add the six `SPACES_*` variables. Set `SPACES_PUBLIC_URL` to the Space CDN URL
+   if CDN is enabled, or the public Space URL otherwise.
+7. Deploy and confirm Flyway reports all migrations successfully applied.
+
+The application listens on the `PORT` supplied by App Platform and trusts forwarded
+HTTPS headers. Product uploads automatically use Spaces when its configuration is
+complete and fall back to local storage during development.
 
 ## Project Structure
 
