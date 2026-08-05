@@ -66,6 +66,46 @@ public class UserRepository {
         user.setId(id); return user;
     }
 
+    public User findOrCreateGoogleUser(String name, String email, String passwordHash) {
+        jdbcTemplate.update("""
+                INSERT INTO users (name, email, password_hash, role)
+                VALUES (?, ?, ?, 'CUSTOMER')
+                ON CONFLICT (email) DO NOTHING
+                """, name, email, passwordHash);
+        return findByEmail(email).orElseThrow();
+    }
+
+    public void replaceLoginVerificationCode(long userId, String codeHash, LocalDateTime expiresAt) {
+        jdbcTemplate.update("DELETE FROM login_verification_codes WHERE user_id = ?", userId);
+        jdbcTemplate.update("INSERT INTO login_verification_codes (user_id, code_hash, expires_at) VALUES (?, ?, ?)",
+                userId, codeHash, expiresAt);
+    }
+
+    public boolean consumeValidLoginVerificationCode(String email, String codeHash) {
+        int updated = jdbcTemplate.update("""
+                UPDATE login_verification_codes c
+                SET used_at = CURRENT_TIMESTAMP
+                FROM users u
+                WHERE c.user_id = u.id
+                  AND lower(u.email) = lower(?)
+                  AND c.code_hash = ?
+                  AND c.used_at IS NULL
+                  AND c.expires_at > CURRENT_TIMESTAMP
+                  AND c.attempts < 5
+                """, email, codeHash);
+        if (updated > 0) return true;
+        jdbcTemplate.update("""
+                UPDATE login_verification_codes c
+                SET attempts = attempts + 1
+                FROM users u
+                WHERE c.user_id = u.id
+                  AND lower(u.email) = lower(?)
+                  AND c.used_at IS NULL
+                  AND c.expires_at > CURRENT_TIMESTAMP
+                """, email);
+        return false;
+    }
+
     public void upsertAdmin(String name, String email, String passwordHash) {
         jdbcTemplate.update("""
                 INSERT INTO users (name, email, password_hash, role, seller_status)

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify sign in - ShopEase</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="container">
+    <div class="auth-page">
+        <h1>Check your email</h1>
+        <p class="subtitle">Enter the six-digit code sent to <strong th:text="${maskedEmail}">e***@example.com</strong></p>
+        <form th:action="@{/verify-login}" method="post" class="auth-form">
+            <div th:if="${error}" class="error-message" th:text="${error}"></div>
+            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+            <div class="form-group">
+                <label for="code">Verification code</label>
+                <input type="text" id="code" name="code" required inputmode="numeric" autocomplete="one-time-code"
+                       pattern="[0-9]{6}" maxlength="6" class="verification-code-input" autofocus>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Verify and sign in</button>
+        </form>
+        <form th:action="@{/verify-login/resend}" method="post" class="resend-form">
+            <button type="submit" class="btn-link">Send a new code</button>
+        </form>
+    </div>
+</main>
+<div th:replace="~{fragments/navbar :: footer}"></div>
+</body>
+</html>

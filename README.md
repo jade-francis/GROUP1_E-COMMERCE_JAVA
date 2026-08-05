@@ -12,7 +12,7 @@ API details and integration examples are available in
 
 ### Customers
 
-- Registration, login, logout, profiles, and password reset
+- Registration, email-code verified login, Google sign-in, logout, profiles, and password reset
 - Randomized product discovery on the homepage and catalogue
 - Product category filtering and product detail pages
 - Shopping cart with quantity and stock validation
@@ -75,7 +75,8 @@ Linux or macOS:
 cp .env.example .env
 ```
 
-4. Update `.env` with the PostgreSQL credentials and initial admin account.
+4. Update `.env` with the PostgreSQL credentials, initial admin account, SMTP
+   credentials, and Google OAuth credentials.
 
 ```properties
 DB_URL=jdbc:postgresql://localhost:5432/shopease_db
@@ -83,7 +84,25 @@ DB_USERNAME=postgres
 DB_PASSWORD=your_database_password
 SHOPEASE_ADMIN_EMAIL=admin@example.com
 SHOPEASE_ADMIN_PASSWORD=use_a_strong_password
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_email_app_password
+MAIL_FROM=your_email@gmail.com
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
+
+Password sign-in sends a six-digit code through SMTP. For Gmail, use an app
+password rather than your normal account password.
+
+Create a Google Cloud OAuth 2.0 Web application client and add this authorized
+redirect URI for local development:
+
+```text
+http://localhost:8080/login/oauth2/code/google
+```
+
+Add the equivalent HTTPS URI for production, for example
+`https://your-domain.com/login/oauth2/code/google`.
 
 5. Start the application.
 

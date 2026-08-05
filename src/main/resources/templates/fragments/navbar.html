@@ -30,7 +30,7 @@
 
             <!-- Authenticated user dropdown -->
             <li sec:authorize="isAuthenticated()" class="navbar-user">
-                <button class="navbar-user-btn" type="button">
+                <button class="navbar-user-btn" type="button" aria-expanded="false" aria-haspopup="true">
                     <span class="navbar-user-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">U</span>
                     <span sec:authorize="hasRole('ADMIN')">Admin</span>
                     <span sec:authorize="!hasRole('ADMIN')" th:text="${currentUser != null ? currentUser.name : #authentication.name}"></span>

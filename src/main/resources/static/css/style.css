@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: #6b7280; }
+.auth-divider::before, .auth-divider::after { content: ""; height: 1px; flex: 1; background: #d1d5db; }
+.btn-google { display: block; width: 100%; text-align: center; background: #fff; color: #1f2937; border: 1px solid #cbd5e1; }
+.btn-google:hover { background: #f8fafc; }
+.verification-code-input { text-align: center; font-size: 1.5rem; letter-spacing: .35rem; font-variant-numeric: tabular-nums; }
+.resend-form { text-align: center; margin-top: 16px; }
+.btn-link { border: 0; background: none; color: var(--primary-color, #2563eb); cursor: pointer; font: inherit; text-decoration: underline; }
+
 :root {
     --color-primary: #6d28d9;
     --color-primary-hover: #5b21b6;
@@ -301,10 +309,14 @@ body {
     .products-layout {
         grid-template-columns: 1fr;
     }
-    .sidebar {
-        display: none;
-    }
+    .sidebar { display: block; }
+    .sidebar-title { display: none; }
+    .sidebar-toggle { display: flex; width: 100%; justify-content: space-between; align-items: center; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface); color: var(--color-text); font: inherit; font-weight: 600; cursor: pointer; }
+    .sidebar .category-list { display: none; margin-top: 8px; }
+    .sidebar.sidebar-open .category-list { display: block; }
 }
+
+.sidebar-toggle { display: none; }
 
 /* Sidebar */
 .sidebar h3 {
@@ -1177,6 +1189,7 @@ body {
     visibility: visible;
     transform: translateY(0);
 }
+.navbar-user.menu-open .navbar-user-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
 
 .navbar-user-dropdown-header {
     padding: 12px 16px;
@@ -1351,7 +1364,8 @@ html[data-theme="dark"] .admin-sellers-table td { border-color: var(--color-bord
 
 /* Keep navigation horizontal at all viewport sizes. */
 @media (max-width: 760px) {
-    .navbar-container { flex-direction: row; align-items: center; gap: 12px; overflow-x: auto; }
+    .navbar-container { flex-direction: row; align-items: center; gap: 12px; overflow: visible; }
     .navbar-nav { width: auto; flex-wrap: nowrap; justify-content: flex-end; margin-left: auto; }
     .navbar-brand small { display: none; }
+    .navbar-user-dropdown { position: absolute; right: 0; max-width: calc(100vw - 24px); }
 }

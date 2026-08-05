@@ -51,6 +51,15 @@ public class UserService {
         return repository.findByEmail(email);
     }
 
+    public User findOrCreateGoogleUser(String name, String email) {
+        String normalizedEmail = email.trim().toLowerCase();
+        Optional<User> existing = repository.findByEmail(normalizedEmail);
+        if (existing.isPresent()) return existing.get();
+        String displayName = name == null || name.isBlank() ? normalizedEmail.substring(0, normalizedEmail.indexOf('@')) : name.trim();
+        String unusablePassword = passwordEncoder.encode(UUID.randomUUID().toString() + UUID.randomUUID());
+        return repository.findOrCreateGoogleUser(displayName, normalizedEmail, unusablePassword);
+    }
+
     public List<User> allSellers() {
         return repository.findBySellerRole();
     }

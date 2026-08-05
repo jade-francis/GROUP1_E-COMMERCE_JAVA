@@ -13,12 +13,16 @@
   import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
   import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+  import com.group1.shopease.security.EmailVerificationSuccessHandler;
+  import com.group1.shopease.security.GoogleOidcUserService;
 
   @Configuration
   public class SecurityConfig {
 
       @Bean
-      public SecurityFilterChain securityFilterChain(HttpSecurity http)
+      public SecurityFilterChain securityFilterChain(HttpSecurity http,
+              EmailVerificationSuccessHandler emailVerificationSuccessHandler,
+              GoogleOidcUserService googleOidcUserService)
               throws Exception {
 
           http
@@ -33,6 +37,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
                       "/cart/**",
                       "/login",
                       "/register",
+                      "/verify-login",
+                      "/verify-login/**",
                       "/forgot-password",
                       "/reset-password"
                   ).permitAll()
@@ -55,13 +61,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
               .formLogin(form -> form
                   .loginPage("/login")
                   .loginProcessingUrl("/login")
-                  .successHandler((request, response, authentication) -> {
-                      boolean admin = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-                      response.sendRedirect(admin ? "/admin" : "/products");
-                  })
+                  .successHandler(emailVerificationSuccessHandler)
                   .failureUrl("/login?error=true")
                   .usernameParameter("email")
                   .permitAll()
+              )
+              .oauth2Login(oauth -> oauth
+                  .loginPage("/login")
+                  .userInfoEndpoint(userInfo -> userInfo.oidcUserService(googleOidcUserService))
+                  .defaultSuccessUrl("/products", true)
+                  .failureUrl("/login?oauthError=true")
               )
               .logout(logout -> logout
                   .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
